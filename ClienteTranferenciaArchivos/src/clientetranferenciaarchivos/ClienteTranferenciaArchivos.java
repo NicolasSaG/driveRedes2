@@ -5,6 +5,8 @@
  */
 package clientetranferenciaarchivos;
 
+import javax.swing.JFrame;
+
 /**
  *
  * @author fnico
@@ -16,6 +18,8 @@ public class ClienteTranferenciaArchivos {
      */
     public static void main(String[] args) {
         // TODO code application logic here
+        Ventana v = new Ventana();
+        v.setVisible(true);
+        v.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     }
-    
 }

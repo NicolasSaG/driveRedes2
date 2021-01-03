@@ -3,6 +3,7 @@ package clientetranferenciaarchivos;
 import javax.swing.JFileChooser;
 import java.net.*;
 import java.io.*;
+import javax.swing.JFrame;
 
 /**
  *
