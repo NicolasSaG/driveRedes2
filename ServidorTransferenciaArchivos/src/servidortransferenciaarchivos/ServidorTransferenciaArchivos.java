@@ -38,7 +38,8 @@ public class ServidorTransferenciaArchivos {
                     long recibidos = 0;
                     int n, porcentaje;
                     while(recibidos < tam){
-                        System.out.println("Recibido: "+recibidos*100/tam+" de 100");
+                        //System.out.println("Recibido: "+recibidos*100/tam+" de 100");
+                        
                         n = dis.read(b);
 //                        
                         dos.write(b, 0, n);

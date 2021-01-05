@@ -209,7 +209,9 @@ public class Ventana extends JFrame {
                 int porcentaje, n;
                 while (enviados < file.length()){
                     porcentaje = (int)(enviados*100/file.length());
-                    System.out.println("Enviado: "+porcentaje+" de 100\n");
+                    //System.out.println("Enviado: "+porcentaje+" de 100");
+                    
+                    progressBar.setValue(porcentaje);
                     n = dis.read(b);
                     
                     dos.write(b, 0, n);
@@ -219,6 +221,7 @@ public class Ventana extends JFrame {
                     //actualizar aqui la barra de estado.
                     
                 }
+                progressBar.setValue(100);
                 System.out.print("\n\nArchivo enviado");
                 dis.close(); //checar si se hace con cada archivo o hasta el final
             }
