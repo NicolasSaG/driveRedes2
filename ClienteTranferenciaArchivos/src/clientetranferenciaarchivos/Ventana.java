@@ -6,14 +6,9 @@
 package clientetranferenciaarchivos;
 
 import java.awt.Container;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.KeyAdapter;
-import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.File;
-import static java.lang.Thread.sleep;
 import java.net.Socket;
 import java.net.SocketException;
 import java.util.logging.Level;
@@ -32,6 +27,7 @@ public class Ventana extends JFrame {
     JTextArea txta_archivos;
     JTextField txtf_tamBuffer;
     JCheckBox chkbx_nagle;
+    JProgressBar progressBar;
     
     Socket cl;
     
@@ -84,6 +80,12 @@ public class Ventana extends JFrame {
                 });        
         contenedor.add(btn_enviarArchivos);
         
+        progressBar = new JProgressBar(0,100);
+        progressBar.setBounds(150, 510, 180, 30);
+        progressBar.setValue(0);
+        progressBar.setStringPainted(true);
+        contenedor.add(progressBar);
+        
         lbl_tamBuffer = new JLabel();
         lbl_tamBuffer.setText("Tamaño de buffer (En Bytes):");
         lbl_tamBuffer.setBounds(200,20,180,30);
@@ -107,9 +109,7 @@ public class Ventana extends JFrame {
             //cl.setTcpNoDelay(true);
         }
         
-        //verificarTamano de buffer >= 1
-        
-        //enviar array de archivos
+        //verificarTamano de buffer >= 1   
     }
     
     private void abrirSelectorDeArchivos(MouseEvent evt){
