@@ -12,6 +12,7 @@ import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.Socket;
 import java.net.SocketException;
@@ -41,10 +42,15 @@ public class Ventana extends JFrame {
     private final String host = "127.0.0.1";
     
     private File[] files;
-    public Ventana() throws IOException{
+    public Ventana(){
         //inicializar socket
-        cl = new Socket(host, puerto);
-        dos = new DataOutputStream(cl.getOutputStream());
+        try {
+            cl = new Socket(host, puerto);
+            dos = new DataOutputStream(cl.getOutputStream());
+        } catch (Exception e) {
+            System.out.println("Error al inicializar el socket");
+            
+        }
         files = null;
         init();
     }
@@ -86,7 +92,7 @@ public class Ventana extends JFrame {
                         try {
                             //Metodo a llamar cuando se pulse el botón
                             iniciarEnvioArchivos();
-                        } catch (SocketException ex) {
+                        } catch (Exception ex) {
                             ex.printStackTrace();
                         }
                     }
@@ -114,7 +120,7 @@ public class Ventana extends JFrame {
         contenedor.add(chkbx_nagle);
     }
 
-    private void iniciarEnvioArchivos() throws SocketException{
+    private void iniciarEnvioArchivos(){
         
         if(txtf_tamBuffer.getText().equals("")){
             JOptionPane.showMessageDialog(this, "Ingrese el tamano de buffer.");
@@ -130,12 +136,16 @@ public class Ventana extends JFrame {
         }
             
         //algoritmo de nagle
-        if(chkbx_nagle.isSelected()){ //descomentarlas cuando se inicialice el socket
-            cl.setTcpNoDelay(false);
-            System.out.println("Algoritmo de nagle activado");
-        }else{
-            cl.setTcpNoDelay(true);
-            System.out.println("Algoritmo de nagle desactivado");
+        try {
+            if(chkbx_nagle.isSelected()){ //descomentarlas cuando se inicialice el socket
+                cl.setTcpNoDelay(false);
+                System.out.println("Algoritmo de nagle activado");
+            }else{
+                cl.setTcpNoDelay(true);
+                System.out.println("Algoritmo de nagle desactivado");
+            }
+        } catch (Exception e) {
+            System.out.println("Error al cambiar el algoritmo de nagle.");
         }
             
         enviarNumArchivos();
@@ -156,14 +166,32 @@ public class Ventana extends JFrame {
     }
 
     private void enviarNumArchivos() {
-        
+        try {
+            dos.writeInt(files.length);
+            dos.flush();
+        } catch (Exception e) {
+            System.out.println("Error al enviar el numero de archivos");
+        }
     }
 
     private void enviarTamBuffer() {
-        
+        try {
+            dos.writeLong(Long.getLong(txtf_tamBuffer.getText()));
+            dos.flush();
+        } catch (Exception e) {
+            System.out.println("Error al enviar el tamano de buffer");
+        }
     }
 
-    private void enviarArchivos() {
+    private void enviarArchivos(){
+        try {
+            for (File file : files) {
+                dis = new DataInputStream(new FileInputStream(file)); 
+                
+            }
+        } catch (Exception e) {
+            System.out.println("Error al enviar los archivos");
+        }
         
     }
     
