@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package clientetranferenciaarchivos;
 
 import java.awt.Container;
@@ -208,20 +203,15 @@ public class Ventana extends JFrame {
                 long enviados = 0;
                 int porcentaje, n;
                 while (enviados < file.length()){
-                    porcentaje = (int)(enviados*100/file.length());
-                    //System.out.println("Enviado: "+porcentaje+" de 100");
-                    
-                    progressBar.setValue(porcentaje);
-                    n = dis.read(b);
-                    
+                    n = dis.read(b);        
                     dos.write(b, 0, n);
                     dos.flush();
                     enviados = enviados+n;
-                    
-                    //actualizar aqui la barra de estado.
+                    //actualizar aqui la barra de estado.                 
+                    //progressBar.setValue((int) (enviados*100/file.length()));
                     
                 }
-                progressBar.setValue(100);
+                
                 System.out.print("\n\nArchivo enviado");
                 dis.close(); //checar si se hace con cada archivo o hasta el final
             }
