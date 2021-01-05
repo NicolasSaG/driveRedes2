@@ -175,19 +175,23 @@ public class Ventana extends JFrame {
 
     private void enviarNumArchivos() {
         try {
+            System.out.println("Num de archivos:" +files.length);
             dos.writeInt(files.length);
             dos.flush();
         } catch (Exception e) {
             System.out.println("Error al enviar el numero de archivos");
+            e.printStackTrace();
         }
     }
 
     private void enviarTamBuffer() {
         try {
-            dos.writeLong(Long.getLong(txtf_tamBuffer.getText()));
+            System.out.println("Tam de buffer:" + txtf_tamBuffer.getText());
+            dos.writeInt(Integer.parseInt(txtf_tamBuffer.getText()));
             dos.flush();
         } catch (Exception e) {
             System.out.println("Error al enviar el tamano de buffer");
+            e.printStackTrace();
         }
     }
 
@@ -199,7 +203,7 @@ public class Ventana extends JFrame {
                 dos.flush();               
                 dos.writeLong(file.length());
                 dos.flush();
-                byte[] b = new byte[Integer.getInteger(txtf_tamBuffer.getText())];
+                byte[] b = new byte[Integer.parseInt(txtf_tamBuffer.getText())];
                 long enviados = 0;
                 int porcentaje, n;
                 while (enviados < file.length()){
@@ -209,6 +213,8 @@ public class Ventana extends JFrame {
                     enviados = enviados+n;
                     porcentaje = (int)(enviados*100/file.length());
                     System.out.print("Enviado: "+porcentaje+"%\r");
+                    //actualizar aqui la barra de estado.
+                    
                 }
                 System.out.print("\n\nArchivo enviado");
                 dis.close(); //checar si se hace con cada archivo o hasta el final
@@ -216,6 +222,7 @@ public class Ventana extends JFrame {
             
         } catch (Exception e) {
             System.out.println("Error al enviar los archivos");
+            e.printStackTrace();
         }
         
     }
