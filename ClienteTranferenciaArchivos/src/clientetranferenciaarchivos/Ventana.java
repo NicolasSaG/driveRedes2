@@ -38,6 +38,7 @@ public class Ventana extends JFrame {
     public Ventana() throws IOException{
         //inicializar socket
         cl = new Socket(host, puerto);
+        files = null;
         init();
     }
     
@@ -77,7 +78,7 @@ public class Ventana extends JFrame {
                     public void mousePressed(MouseEvent evt) {
                         try {
                             //Metodo a llamar cuando se pulse el botón
-                            enviarArchivos(evt);
+                            iniciarEnvioArchivos();
                         } catch (SocketException ex) {
                             ex.printStackTrace();
                         }
@@ -96,7 +97,7 @@ public class Ventana extends JFrame {
         lbl_tamBuffer.setBounds(200,20,180,30);
         contenedor.add(lbl_tamBuffer);   
         
-        txtf_tamBuffer = new JTextField("1024");
+        txtf_tamBuffer = new JTextField();
         txtf_tamBuffer.setBounds(380, 20, 80, 30);
         ((AbstractDocument)txtf_tamBuffer.getDocument()).setDocumentFilter(new FiltroNumeros());
         contenedor.add(txtf_tamBuffer);
@@ -106,8 +107,22 @@ public class Ventana extends JFrame {
         contenedor.add(chkbx_nagle);
     }
 
-    private void enviarArchivos(MouseEvent evt) throws SocketException{
-         //algoritmo de nagle
+    private void iniciarEnvioArchivos() throws SocketException{
+        
+        if(txtf_tamBuffer.getText().equals("")){
+            JOptionPane.showMessageDialog(this, "Ingrese el tamano de buffer.");
+            return;
+        }
+        if(Integer.parseInt(txtf_tamBuffer.getText()) < 1){
+            JOptionPane.showMessageDialog(this, "El tamaño del buffer debe ser de 1 byte o mayor");
+            return;
+        }
+        if(files == null){
+            JOptionPane.showMessageDialog(this, "No se han seleccionado archivos.");
+            return;
+        }
+            
+        //algoritmo de nagle
         if(chkbx_nagle.isSelected()){ //descomentarlas cuando se inicialice el socket
             cl.setTcpNoDelay(false);
             System.out.println("Algoritmo de nagle activado");
@@ -115,9 +130,10 @@ public class Ventana extends JFrame {
             cl.setTcpNoDelay(true);
             System.out.println("Algoritmo de nagle desactivado");
         }
-        
-        //verificarTamano de buffer >= 1 
-        
+            
+        enviarNumArchivos();
+        enviarTamBuffer();
+        enviarArchivos();  
     }
     
     private void abrirSelectorDeArchivos(MouseEvent evt){
@@ -130,6 +146,18 @@ public class Ventana extends JFrame {
             txta_archivos.append("Nombre del archivo: " + files[i].getName() + " tamaño del archivo: " + files[i].length() + " bytes\n");
             System.out.println("Nombre del archivo: " + files[i].getName() + " tamaño del archivo: " + files[i].length() + " bytes");
         }                      
+    }
+
+    private void enviarNumArchivos() {
+        
+    }
+
+    private void enviarTamBuffer() {
+        
+    }
+
+    private void enviarArchivos() {
+        
     }
     
 }
