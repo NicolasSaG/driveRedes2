@@ -43,14 +43,6 @@ public class Ventana extends JFrame {
     
     private File[] files;
     public Ventana(){
-        //inicializar socket
-        try {
-            cl = new Socket(host, puerto);
-            dos = new DataOutputStream(cl.getOutputStream());
-        } catch (Exception e) {
-            System.out.println("Error al inicializar el socket");
-            
-        }
         files = null;
         init();
     }
@@ -134,6 +126,15 @@ public class Ventana extends JFrame {
             JOptionPane.showMessageDialog(this, "No se han seleccionado archivos.");
             return;
         }
+        
+        //inicializar socket
+        try {
+            cl = new Socket(host, puerto);
+            dos = new DataOutputStream(cl.getOutputStream());
+        } catch (Exception e) {
+            System.out.println("Error al inicializar el socket");
+            
+        }
             
         //algoritmo de nagle
         try {
@@ -151,6 +152,13 @@ public class Ventana extends JFrame {
         enviarNumArchivos();
         enviarTamBuffer();
         enviarArchivos();  
+        
+        try {
+            dos.close();
+            cl.close();
+        } catch (Exception e) {
+            System.out.println("Error al cerrar el socket y output stream.");
+        }
     }
     
     private void abrirSelectorDeArchivos(MouseEvent evt){
@@ -187,8 +195,25 @@ public class Ventana extends JFrame {
         try {
             for (File file : files) {
                 dis = new DataInputStream(new FileInputStream(file)); 
-                
+                dos.writeUTF(file.getName());
+                dos.flush();               
+                dos.writeLong(file.length());
+                dos.flush();
+                byte[] b = new byte[Integer.getInteger(txtf_tamBuffer.getText())];
+                long enviados = 0;
+                int porcentaje, n;
+                while (enviados < file.length()){
+                    n = dis.read(b);
+                    dos.write(b, 0, n);
+                    dos.flush();
+                    enviados = enviados+n;
+                    porcentaje = (int)(enviados*100/file.length());
+                    System.out.print("Enviado: "+porcentaje+"%\r");
+                }
+                System.out.print("\n\nArchivo enviado");
+                dis.close(); //checar si se hace con cada archivo o hasta el final
             }
+            
         } catch (Exception e) {
             System.out.println("Error al enviar los archivos");
         }
