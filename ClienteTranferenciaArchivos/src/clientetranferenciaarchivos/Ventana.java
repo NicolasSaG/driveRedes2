@@ -96,7 +96,7 @@ public class Ventana extends JFrame {
         lbl_tamBuffer.setBounds(200,20,180,30);
         contenedor.add(lbl_tamBuffer);   
         
-        txtf_tamBuffer = new JTextField();
+        txtf_tamBuffer = new JTextField("1024");
         txtf_tamBuffer.setBounds(380, 20, 80, 30);
         ((AbstractDocument)txtf_tamBuffer.getDocument()).setDocumentFilter(new FiltroNumeros());
         contenedor.add(txtf_tamBuffer);
