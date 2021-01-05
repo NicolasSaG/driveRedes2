@@ -14,6 +14,8 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.File;
 import static java.lang.Thread.sleep;
+import java.net.Socket;
+import java.net.SocketException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.*;
@@ -25,11 +27,14 @@ import javax.swing.text.AbstractDocument;
  * @author fnico
  */
 public class Ventana extends JFrame {
-    JButton btn_seleccionarArchivos;
+    JButton btn_seleccionarArchivos, btn_enviarArchivos;
     JLabel lbl_instruccion, lbl_tamBuffer ;
     JTextArea txta_archivos;
     JTextField txtf_tamBuffer;
     JCheckBox chkbx_nagle;
+    
+    Socket cl;
+    
     private File[] files;
     public Ventana(){
         init();
@@ -64,6 +69,21 @@ public class Ventana extends JFrame {
         txta_archivos.setBounds(10,100,460,400);
         contenedor.add(txta_archivos);
         
+        btn_enviarArchivos = new JButton("Enviar");
+        btn_enviarArchivos.setBounds(360, 510, 100, 30);
+        btn_enviarArchivos.addMouseListener(new MouseAdapter() {
+                    @Override
+                    public void mousePressed(MouseEvent evt) {
+                        try {
+                            //Metodo a llamar cuando se pulse el botón
+                            enviarArchivos(evt);
+                        } catch (SocketException ex) {
+                            ex.printStackTrace();
+                        }
+                    }
+                });        
+        contenedor.add(btn_enviarArchivos);
+        
         lbl_tamBuffer = new JLabel();
         lbl_tamBuffer.setText("Tamaño de buffer (En Bytes):");
         lbl_tamBuffer.setBounds(200,20,180,30);
@@ -79,13 +99,20 @@ public class Ventana extends JFrame {
         contenedor.add(chkbx_nagle);
     }
 
+    private void enviarArchivos(MouseEvent evt) throws SocketException{
+         //algoritmo de nagle
+        if(chkbx_nagle.isSelected()){ //descomentarlas cuando se inicialice el socket
+            //cl.setTcpNoDelay(false);
+        }else{
+            //cl.setTcpNoDelay(true);
+        }
+        
+        //verificarTamano de buffer >= 1
+        
+        //enviar array de archivos
+    }
     
     private void abrirSelectorDeArchivos(MouseEvent evt){
-       /* JFileChooser jf = new JFileChooser();
-        int r = jf.showOpenDialog(this);
-        if (r==JFileChooser.APPROVE_OPTION){
-            System.out.println("aprobada");
-        }*/
         JFileChooser fc = new JFileChooser();
         fc.setMultiSelectionEnabled(true);
         fc.showOpenDialog(this);  
@@ -94,8 +121,6 @@ public class Ventana extends JFrame {
         for (int i=0; i<files.length; i++) {
             txta_archivos.append("Nombre del archivo: " + files[i].getName() + " tamaño del archivo: " + files[i].length() + " bytes\n");
             System.out.println("Nombre del archivo: " + files[i].getName() + " tamaño del archivo: " + files[i].length() + " bytes");
-            
-            
         }                      
     }
     
