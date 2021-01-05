@@ -9,6 +9,7 @@ import java.awt.Container;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.File;
+import java.io.IOException;
 import java.net.Socket;
 import java.net.SocketException;
 import java.util.logging.Level;
@@ -30,9 +31,13 @@ public class Ventana extends JFrame {
     JProgressBar progressBar;
     
     Socket cl;
+    private final int puerto = 7000;
+    private final String host = "127.0.0.1";
     
     private File[] files;
-    public Ventana(){
+    public Ventana() throws IOException{
+        //inicializar socket
+        cl = new Socket(host, puerto);
         init();
     }
     
@@ -104,12 +109,15 @@ public class Ventana extends JFrame {
     private void enviarArchivos(MouseEvent evt) throws SocketException{
          //algoritmo de nagle
         if(chkbx_nagle.isSelected()){ //descomentarlas cuando se inicialice el socket
-            //cl.setTcpNoDelay(false);
+            cl.setTcpNoDelay(false);
+            System.out.println("Algoritmo de nagle activado");
         }else{
-            //cl.setTcpNoDelay(true);
+            cl.setTcpNoDelay(true);
+            System.out.println("Algoritmo de nagle desactivado");
         }
         
-        //verificarTamano de buffer >= 1   
+        //verificarTamano de buffer >= 1 
+        
     }
     
     private void abrirSelectorDeArchivos(MouseEvent evt){
