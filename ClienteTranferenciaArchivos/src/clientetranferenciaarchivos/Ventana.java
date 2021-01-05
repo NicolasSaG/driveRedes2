@@ -8,7 +8,10 @@ package clientetranferenciaarchivos;
 import java.awt.Container;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.net.Socket;
 import java.net.SocketException;
@@ -31,6 +34,9 @@ public class Ventana extends JFrame {
     JProgressBar progressBar;
     
     Socket cl;
+    DataOutputStream dos;
+    DataInputStream dis;// = new DataInputStream(new FileInputStream(archivo));    
+    
     private final int puerto = 7000;
     private final String host = "127.0.0.1";
     
@@ -38,6 +44,7 @@ public class Ventana extends JFrame {
     public Ventana() throws IOException{
         //inicializar socket
         cl = new Socket(host, puerto);
+        dos = new DataOutputStream(cl.getOutputStream());
         files = null;
         init();
     }
