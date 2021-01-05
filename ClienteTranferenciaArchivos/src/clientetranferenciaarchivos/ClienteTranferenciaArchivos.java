@@ -5,6 +5,7 @@
  */
 package clientetranferenciaarchivos;
 
+import java.io.IOException;
 import javax.swing.JFrame;
 
 /**
@@ -16,7 +17,7 @@ public class ClienteTranferenciaArchivos {
     /**
      * @param args the command line arguments
      */
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
         // TODO code application logic here
         Ventana v = new Ventana();
         v.setVisible(true);
