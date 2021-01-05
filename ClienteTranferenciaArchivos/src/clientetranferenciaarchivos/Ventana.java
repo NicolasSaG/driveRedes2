@@ -10,11 +10,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import javax.swing.JButton;
-import javax.swing.JFileChooser;
-import javax.swing.JFrame;
-
-import javax.swing.JTextField;
+import java.io.File;
+import javax.swing.*;
 import static javax.swing.WindowConstants.EXIT_ON_CLOSE;
 
 /**
@@ -23,8 +20,9 @@ import static javax.swing.WindowConstants.EXIT_ON_CLOSE;
  */
 public class Ventana extends JFrame {
     JButton btn_seleccionarArchivos;
-    JTextField txtf_archivosSeleccionados;
-    
+    JLabel txtf_instruccion;
+    JTextArea txta_archivos;
+    private File[] files;
     public Ventana(){
         init();
     }
@@ -38,8 +36,13 @@ public class Ventana extends JFrame {
         setTitle("Servicio de transferencia de archivos");
         setResizable(false);
         
-        btn_seleccionarArchivos = new JButton("Abrir");
-        btn_seleccionarArchivos.setBounds(350, 150, 100, 30);
+        txtf_instruccion = new JLabel();
+        txtf_instruccion.setText("Seleccione los arhivos a enviar");
+        txtf_instruccion.setBounds(10,10,200,30);
+        btn_seleccionarArchivos = new JButton("Seleccionar");
+        btn_seleccionarArchivos.setBounds(10, 50, 150, 30);
+        txta_archivos = new JTextArea();
+        txta_archivos.setBounds(10,100,460,400);
         btn_seleccionarArchivos.addMouseListener(new MouseAdapter() {
                     @Override
                     public void mousePressed(MouseEvent evt) {
@@ -47,14 +50,26 @@ public class Ventana extends JFrame {
                         abrirSelectorDeArchivos(evt);
                     }
                 });
+        contenedor.add(txtf_instruccion);
         contenedor.add(btn_seleccionarArchivos);
+        contenedor.add(txta_archivos);
     }
 
     private void abrirSelectorDeArchivos(MouseEvent evt){
-        JFileChooser jf = new JFileChooser();
+       /* JFileChooser jf = new JFileChooser();
         int r = jf.showOpenDialog(this);
         if (r==JFileChooser.APPROVE_OPTION){
-            System.out.println("aproada");
-        }
+            System.out.println("aprobada");
+        }*/
+        JFileChooser fc = new JFileChooser();
+        fc.setMultiSelectionEnabled(true);
+        fc.showOpenDialog(this);  
+        files = fc.getSelectedFiles();
+        txta_archivos.append("Archivos seleccionados (" + files.length +")\n");
+        for (int i=0; i<files.length; i++) {
+            txta_archivos.append("Nombre del archivo: " + files[i].getName() + " tamaño del archivo: " + files[i].length() + " bytes\n");
+            System.out.println("Nombre del archivo: " + files[i].getName() + " tamaño del archivo: " + files[i].length() + " bytes");
+        }                      
     }
+    
 }
