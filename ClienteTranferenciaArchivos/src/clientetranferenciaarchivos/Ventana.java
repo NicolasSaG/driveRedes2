@@ -131,6 +131,7 @@ public class Ventana extends JFrame {
         try {
             cl = new Socket(host, puerto);
             dos = new DataOutputStream(cl.getOutputStream());
+            //cl.setSendBufferSize(Integer.parseInt(txtf_tamBuffer.getText()));    
         } catch (Exception e) {
             System.out.println("Error al inicializar el socket");
             
@@ -207,12 +208,14 @@ public class Ventana extends JFrame {
                 long enviados = 0;
                 int porcentaje, n;
                 while (enviados < file.length()){
+                    porcentaje = (int)(enviados*100/file.length());
+                    System.out.println("Enviado: "+porcentaje+" de 100\n");
                     n = dis.read(b);
+                    
                     dos.write(b, 0, n);
                     dos.flush();
                     enviados = enviados+n;
-                    porcentaje = (int)(enviados*100/file.length());
-                    System.out.print("Enviado: "+porcentaje+"%\r");
+                    
                     //actualizar aqui la barra de estado.
                     
                 }

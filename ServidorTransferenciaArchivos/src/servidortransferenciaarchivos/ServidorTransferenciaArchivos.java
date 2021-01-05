@@ -16,12 +16,13 @@ public class ServidorTransferenciaArchivos {
             ServerSocket s = new ServerSocket(7000);
             while(true){
                 // Esperamos una conexión 
-                Socket cl = s.accept();
+                Socket cl = s.accept();             
                 DataOutputStream dos;
                 System.out.println("Conexión establecida desde"+cl.getInetAddress()+":"+cl.getPort());
                 DataInputStream dis = new DataInputStream(cl.getInputStream());
                 int numArchivos = dis.readInt();
                 int tamBuffer = dis.readInt();
+                
                 byte[] b = new byte[tamBuffer];
                 
                 System.out.println(cl.getInetAddress()+":"+cl.getPort()+"/numero de archivos:"+numArchivos);
@@ -37,12 +38,13 @@ public class ServidorTransferenciaArchivos {
                     long recibidos = 0;
                     int n, porcentaje;
                     while(recibidos < tam){
+                        System.out.println("Recibido: "+recibidos*100/tam+" de 100");
                         n = dis.read(b);
-                        dos.write(b,0,n);
+//                        
+                        dos.write(b, 0, n);
                         dos.flush();
                         recibidos = recibidos + n;
-                        porcentaje = (int)(recibidos*100/tam);
-                        System.out.print("Recibido: "+porcentaje+"%\r");
+                        
                     }//While
                     System.out.println("Archivo " + (i+1)+" recibido.");
                     dos.close();
