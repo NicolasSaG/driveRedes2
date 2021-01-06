@@ -14,8 +14,7 @@ public class Repetidor {
     public static void main(String[] args) {
         try{
             ServerSocket s = new ServerSocket(7000);
-            
-            
+                        
             while(true){
                 // Esperamos una conexión 
                 Socket cl = s.accept();
@@ -27,10 +26,10 @@ public class Repetidor {
                 int numArchivos = dis.readInt();
                 int tamBuffer = dis.readInt();
                 
-                //enviar num de archivos
+                //enviar num de archivos al repetidor o cola
                 dosRep.writeInt(numArchivos);
                 dosRep.flush();
-                //enviar tam de buffer
+                //enviar tam de buffer al repetidor o cola
                 dosRep.writeInt(tamBuffer);
                 dosRep.flush();
                 
@@ -43,26 +42,33 @@ public class Repetidor {
                 //empieza recepcion de archivos
                 for(int i = 0; i < numArchivos; i++){
                     String nombreArchivo = dis.readUTF();
+                    dosRep.writeUTF(nombreArchivo);
+                    dosRep.flush();               
+                    
                     System.out.println(cl.getInetAddress()+":"+cl.getPort()+"/recibiendo nombre:"+nombreArchivo);
                     long tam = dis.readLong();
+                    dosRep.writeLong(tam);
+                    dosRep.flush();
                     System.out.println(cl.getInetAddress()+":"+cl.getPort()+"/recibiendo tam:"+tam);
                     dos = new DataOutputStream(new FileOutputStream(nombreArchivo));
                     long recibidos = 0;
                     int n, porcentaje;
                     while(recibidos < tam){
-                        //System.out.println("Recibido: "+recibidos*100/tam+" de 100");
-                        
                         n = dis.read(b);
-//                        
                         dos.write(b, 0, n);
                         dos.flush();
-                        recibidos = recibidos + n;
                         
+                        //enviados a otro
+                        dosRep.write(b, 0, n);
+                        dosRep.flush();
+                        
+                        recibidos = recibidos + n;
                     }//While
                     System.out.println("Archivo " + (i+1)+" recibido.");
                     dos.close();
+                    
                 }
-
+                dosRep.close();
                 dis.close();
                 cl.close();
             }

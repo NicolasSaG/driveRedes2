@@ -86,11 +86,11 @@ public class Ventana extends JFrame {
                 });        
         contenedor.add(btn_enviarArchivos);
         
-        progressBar = new JProgressBar(0,100);
-        progressBar.setBounds(150, 510, 180, 30);
-        progressBar.setValue(0);
-        progressBar.setStringPainted(true);
-        contenedor.add(progressBar);
+//        progressBar = new JProgressBar(0,100);
+//        progressBar.setBounds(150, 510, 180, 30);
+//        progressBar.setValue(0);
+//        progressBar.setStringPainted(true);
+//        contenedor.add(progressBar);
         
         lbl_tamBuffer = new JLabel();
         lbl_tamBuffer.setText("Tamaño de buffer (En Bytes):");
