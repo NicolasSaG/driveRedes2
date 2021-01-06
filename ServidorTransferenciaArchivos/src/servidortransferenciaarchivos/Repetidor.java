@@ -10,18 +10,30 @@ import java.net.Socket;
  *
  * @author fnico
  */
-public class ServidorTransferenciaArchivos {
+public class Repetidor {
     public static void main(String[] args) {
         try{
             ServerSocket s = new ServerSocket(7000);
+            
+            
             while(true){
                 // Esperamos una conexión 
-                Socket cl = s.accept();             
+                Socket cl = s.accept();
+                Socket rep = new Socket("127.0.0.1", 7001);
+                DataOutputStream dosRep = new DataOutputStream(rep.getOutputStream());
                 DataOutputStream dos;
                 System.out.println("Conexión establecida desde"+cl.getInetAddress()+":"+cl.getPort());
                 DataInputStream dis = new DataInputStream(cl.getInputStream());
                 int numArchivos = dis.readInt();
                 int tamBuffer = dis.readInt();
+                
+                //enviar num de archivos
+                dosRep.writeInt(numArchivos);
+                dosRep.flush();
+                //enviar tam de buffer
+                dosRep.writeInt(tamBuffer);
+                dosRep.flush();
+                
                 
                 byte[] b = new byte[tamBuffer];
                 
