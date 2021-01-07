@@ -28,17 +28,16 @@ public class Servidor {
                 Socket cl = s.accept();
                 System.out.println("conexion establecida desde " + cl.getInetAddress() + ":" + cl.getPort());
                 
-                PrintWriter out = new PrintWriter(cl.getOutputStream());//con println se auto flushea 
+                PrintWriter out = new PrintWriter(cl.getOutputStream(), true);//con println se auto flushea 
                 BufferedReader in = new BufferedReader(new InputStreamReader(cl.getInputStream()));
                 
                 String msjRecibido;
                 while ((msjRecibido = in.readLine()) != null) {
-                    //System.out.println("Recibiendo " + msjRecibido +" de "+ cl.getInetAddress() + ":" + cl.getPort() );
+                    System.out.println("Recibiendo " + msjRecibido +"de "+ cl.getInetAddress() + ":" + cl.getPort() );
                     out.println(msjRecibido);
-                    if(msjRecibido.equals("exit")){
+                    if(msjRecibido.equals("exit"))
                         break;
-                    }
-                }   
+                }
 
                 
                 

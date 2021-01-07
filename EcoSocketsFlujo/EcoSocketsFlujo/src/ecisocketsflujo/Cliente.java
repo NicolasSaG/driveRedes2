@@ -17,25 +17,21 @@ import java.net.Socket;
 public class Cliente {
     public static void main(String[] args) {
         try { //siempre dentre de bloques try catch cuando trabajemos con sockets
-            System.out.println("dir:");
+            
+            
+            Socket cl = new Socket("189.133.77.160", 1234);
+            
             BufferedReader stdIn = new BufferedReader(new InputStreamReader(System.in));
-
-            Socket cl = new Socket("10.0.0.10", 1234);
-            
-            
-            PrintWriter out = new PrintWriter(cl.getOutputStream()); 
+            PrintWriter out = new PrintWriter(cl.getOutputStream(), true); 
             BufferedReader in = new BufferedReader(new InputStreamReader(cl.getInputStream()));
             
             String msj = "";
-            
             while((msj = stdIn.readLine()) != null){
-                System.out.println("mensaje escrito");
                 out.println(msj);
-                
                 System.out.println("Eco: " + in.readLine());
-                if(msj.equals("exit")){
-                    break;
-                }
+                
+                if(msj.equals("Adios"))
+                        break;
             }
             
             //primero cerrar flujos
