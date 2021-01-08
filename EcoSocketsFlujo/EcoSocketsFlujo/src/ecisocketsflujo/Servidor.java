@@ -20,7 +20,7 @@ public class Servidor {
         try {
             //se tiene el listener para empezar a recibir conexiones
             System.out.println("Servidor de Eco");
-            ServerSocket s = new ServerSocket(1234);
+            ServerSocket s = new ServerSocket(7001);
             System.out.println("Esperando cliente...");
             while(true){
                 //del lado del server hay serversocket y socket

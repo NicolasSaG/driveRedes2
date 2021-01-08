@@ -33,7 +33,7 @@ public class Ventana extends JFrame {
     DataOutputStream dos;
     DataInputStream dis;// = new DataInputStream(new FileInputStream(archivo));    
     
-    private final int puerto = 7000;
+    private final int puerto = 7001;
     private final String host = "189.188.253.66";
     
     private File[] files;
@@ -203,10 +203,18 @@ public class Ventana extends JFrame {
                 long enviados = 0;
                 int porcentaje, n;
                 while (enviados < file.length()){
-                    n = dis.read(b);        
-                    dos.write(b, 0, n);
-                    dos.flush();
-                    enviados = enviados+n;
+                    System.out.println("enviado " +enviados +"de " + file.length());
+                    if(enviados + Integer.parseInt(txtf_tamBuffer.getText()) >= file.length()){
+                        n = dis.read(b, 0, (int) (file.length() - enviados));        
+                        dos.write(b, 0, n);
+                        dos.flush();
+                        enviados = enviados+n;
+                    }else{
+                        n = dis.read(b);        
+                        dos.write(b, 0, n);
+                        dos.flush();
+                        enviados = enviados+n;
+                    }
                     //actualizar aqui la barra de estado.                 
                     //progressBar.setValue((int) (enviados*100/file.length()));
                     

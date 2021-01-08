@@ -19,8 +19,8 @@ public class Cliente {
         try { //siempre dentre de bloques try catch cuando trabajemos con sockets
             
             
-            Socket cl = new Socket("189.133.77.160", 1234);
-            
+            Socket cl = new Socket("189.188.253.66", 7001);
+            System.out.println("Conexion estalblecida..");
             BufferedReader stdIn = new BufferedReader(new InputStreamReader(System.in));
             PrintWriter out = new PrintWriter(cl.getOutputStream(), true); 
             BufferedReader in = new BufferedReader(new InputStreamReader(cl.getInputStream()));

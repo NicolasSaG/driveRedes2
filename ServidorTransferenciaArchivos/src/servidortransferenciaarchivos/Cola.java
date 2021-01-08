@@ -26,7 +26,7 @@ public class Cola {
                 DataOutputStream dos;
                 System.out.println("Conexión establecida desde"+cl.getInetAddress()+":"+cl.getPort());
                 DataInputStream dis = new DataInputStream(cl.getInputStream());
-                int numArchivos = dis.readInt();
+                int numArchivos = dis.readInt(); 
                 int tamBuffer = dis.readInt();
                 
                 byte[] b = new byte[tamBuffer];
