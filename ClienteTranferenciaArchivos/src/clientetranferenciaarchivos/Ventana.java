@@ -198,27 +198,27 @@ public class Ventana extends JFrame {
                 dos.flush();               
                 dos.writeLong(file.length());
                 dos.flush();        
-//                byte[] b = new byte[Integer.parseInt(txtf_tamBuffer.getText())];
-//                long enviados = 0;
-//                int porcentaje, n;
-//                while (enviados < file.length()){
-//                    System.out.println("enviado " +enviados +"de " + file.length());
-//                    if(enviados + Integer.parseInt(txtf_tamBuffer.getText()) >= file.length()){
-//                        System.out.println("ultimo bloque enviado");
-//                        n = dis.read(b, 0, (int) (file.length() - enviados));   
-//                        System.out.println(n);
-//                            
-//                        dos.write(b, 0, n);
-//                        dos.flush();
-//                        enviados = enviados+n;
-//                    }else{
-//                        System.out.println("nloque normal enviado");
-//                        n = dis.read(b);        
-//                        dos.write(b, 0, n);
-//                        dos.flush();
-//                        enviados = enviados+n;
-//                    }
-//                }
+                byte[] b = new byte[Integer.parseInt(txtf_tamBuffer.getText())];
+                long enviados = 0;
+                int porcentaje, n;
+                while (enviados < file.length()){
+                    System.out.println("enviado " +enviados +"de " + file.length());
+                    if(enviados + Integer.parseInt(txtf_tamBuffer.getText()) >= file.length()){
+                        System.out.println("ultimo bloque enviado");
+                        n = dis.read(b, 0, (int) (file.length() - enviados));   
+                        System.out.println("n:" + n);
+                        dos.write(b, 0, n);
+                        //dos.flush();
+                        enviados = enviados+n;
+                    }else{
+                        System.out.println("nloque normal enviado");
+                        n = dis.read(b);  
+                        System.out.println("n:" + n);
+                        dos.write(b, 0, n);
+                        //dos.flush();
+                        enviados = enviados+n;
+                    }
+                }
                 System.out.print("\n\nArchivo enviado");      
             }
             dis.close(); //checar si se hace con cada archivo o hasta el final

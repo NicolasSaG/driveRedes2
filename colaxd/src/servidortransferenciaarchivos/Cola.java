@@ -35,24 +35,19 @@ public class Cola {
                     System.out.println(cl.getInetAddress()+":"+cl.getPort()+"/recibiendo nombre:"+nombreArchivo);
                     long tam = dis.readLong();
                     System.out.println(cl.getInetAddress()+":"+cl.getPort()+"/recibiendo tam:"+tam);
-//                    dos = new DataOutputStream(new FileOutputStream(nombreArchivo));
-//                    long recibidos = 0;
-//                    int n, porcentaje;
-//                    while(tam > 0 && (n = dis.read(b, 0, (int)Math.min(b.length, tam))) != -1){
-//                        //System.out.println("Recibido: "+recibidos*100/tam+" de 100");
-//                        
-//                        n = dis.read(b);
-////                        
-//                        dos.write(b, 0, n);
-//                        dos.flush();
-//                        tam -= n;
-//
-//                    }//While
+                    dos = new DataOutputStream(new FileOutputStream(nombreArchivo));
+                    long recibidos = 0;
+                    int n, porcentaje;
+                    while(tam > 0 && (n = dis.read(b, 0, (int)Math.min(b.length, tam))) != -1){   
+                        System.out.println("n: " + n);
+                        dos.write(b, 0, n);
+                        //dos.flush();
+                        tam -= n;
+                    }//While
                     System.out.println("Archivo " + (i+1)+" recibido.");
-                    System.out.println("Archivo " + (i+1)+" recibido.");
-                    
+                    dos.close();
                 }
-                //dos.close();
+                
                 dis.close();
                 cl.close();
             }
