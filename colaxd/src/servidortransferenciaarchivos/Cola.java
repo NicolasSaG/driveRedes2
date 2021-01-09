@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package servidortransferenciaarchivos;
 
 import java.io.DataInputStream;
@@ -51,7 +46,17 @@ public class Cola {
                         dos.write(b, 0, n);
                         dos.flush();
                         recibidos = recibidos + n;
-                        
+                        if(recibidos + tamBuffer > tam){
+                            n = dis.read(b, 0,(int)(tam-recibidos));        
+                            dos.write(b, 0, n);
+                            dos.flush();
+                            recibidos = recibidos+n;
+                        }else{
+                            n = dis.read(b);        
+                            dos.write(b, 0, n);
+                            dos.flush();
+                            recibidos = recibidos+n;
+                        }
                     }//While
                     System.out.println("Archivo " + (i+1)+" recibido.");
                     dos.close();

@@ -34,7 +34,7 @@ public class Ventana extends JFrame {
     DataInputStream dis;// = new DataInputStream(new FileInputStream(archivo));    
     
     private final int puerto = 7001;
-    private final String host = "189.188.253.66";
+    private final String host = "127.0.0.1";
     
     private File[] files;
     public Ventana(){
