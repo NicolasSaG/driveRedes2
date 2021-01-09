@@ -125,8 +125,7 @@ public class Ventana extends JFrame {
         //inicializar socket
         try {
             cl = new Socket(host, puerto);
-            dos = new DataOutputStream(cl.getOutputStream());
-            //cl.setSendBufferSize(Integer.parseInt(txtf_tamBuffer.getText()));    
+            dos = new DataOutputStream(cl.getOutputStream());  
         } catch (Exception e) {
             System.out.println("Error al inicializar el socket");
             
@@ -198,32 +197,31 @@ public class Ventana extends JFrame {
                 dos.writeUTF(file.getName());
                 dos.flush();               
                 dos.writeLong(file.length());
-                dos.flush();
-                byte[] b = new byte[Integer.parseInt(txtf_tamBuffer.getText())];
-                long enviados = 0;
-                int porcentaje, n;
-                while (enviados < file.length()){
-                    System.out.println("enviado " +enviados +"de " + file.length());
-                    if(enviados + Integer.parseInt(txtf_tamBuffer.getText()) >= file.length()){
-                        n = dis.read(b, 0, (int) (file.length() - enviados));        
-                        dos.write(b, 0, n);
-                        dos.flush();
-                        enviados = enviados+n;
-                    }else{
-                        n = dis.read(b);        
-                        dos.write(b, 0, n);
-                        dos.flush();
-                        enviados = enviados+n;
-                    }
-                    //actualizar aqui la barra de estado.                 
-                    //progressBar.setValue((int) (enviados*100/file.length()));
-                    
-                }
-                
-                System.out.print("\n\nArchivo enviado");
-                dis.close(); //checar si se hace con cada archivo o hasta el final
+                dos.flush();        
+//                byte[] b = new byte[Integer.parseInt(txtf_tamBuffer.getText())];
+//                long enviados = 0;
+//                int porcentaje, n;
+//                while (enviados < file.length()){
+//                    System.out.println("enviado " +enviados +"de " + file.length());
+//                    if(enviados + Integer.parseInt(txtf_tamBuffer.getText()) >= file.length()){
+//                        System.out.println("ultimo bloque enviado");
+//                        n = dis.read(b, 0, (int) (file.length() - enviados));   
+//                        System.out.println(n);
+//                            
+//                        dos.write(b, 0, n);
+//                        dos.flush();
+//                        enviados = enviados+n;
+//                    }else{
+//                        System.out.println("nloque normal enviado");
+//                        n = dis.read(b);        
+//                        dos.write(b, 0, n);
+//                        dos.flush();
+//                        enviados = enviados+n;
+//                    }
+//                }
+                System.out.print("\n\nArchivo enviado");      
             }
-            
+            dis.close(); //checar si se hace con cada archivo o hasta el final
         } catch (Exception e) {
             System.out.println("Error al enviar los archivos");
             e.printStackTrace();

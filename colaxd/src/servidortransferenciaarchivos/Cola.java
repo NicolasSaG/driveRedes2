@@ -18,7 +18,7 @@ public class Cola {
             while(true){
                 // Esperamos una conexión 
                 Socket cl = s.accept();             
-                DataOutputStream dos;
+                DataOutputStream dos = null;
                 System.out.println("Conexión establecida desde"+cl.getInetAddress()+":"+cl.getPort());
                 DataInputStream dis = new DataInputStream(cl.getInputStream());
                 int numArchivos = dis.readInt();
@@ -35,33 +35,24 @@ public class Cola {
                     System.out.println(cl.getInetAddress()+":"+cl.getPort()+"/recibiendo nombre:"+nombreArchivo);
                     long tam = dis.readLong();
                     System.out.println(cl.getInetAddress()+":"+cl.getPort()+"/recibiendo tam:"+tam);
-                    dos = new DataOutputStream(new FileOutputStream(nombreArchivo));
-                    long recibidos = 0;
-                    int n, porcentaje;
-                    while(recibidos < tam){
-                        //System.out.println("Recibido: "+recibidos*100/tam+" de 100");
-                        
-                        n = dis.read(b);
+//                    dos = new DataOutputStream(new FileOutputStream(nombreArchivo));
+//                    long recibidos = 0;
+//                    int n, porcentaje;
+//                    while(tam > 0 && (n = dis.read(b, 0, (int)Math.min(b.length, tam))) != -1){
+//                        //System.out.println("Recibido: "+recibidos*100/tam+" de 100");
 //                        
-                        dos.write(b, 0, n);
-                        dos.flush();
-                        recibidos = recibidos + n;
-                        if(recibidos + tamBuffer > tam){
-                            n = dis.read(b, 0,(int)(tam-recibidos));        
-                            dos.write(b, 0, n);
-                            dos.flush();
-                            recibidos = recibidos+n;
-                        }else{
-                            n = dis.read(b);        
-                            dos.write(b, 0, n);
-                            dos.flush();
-                            recibidos = recibidos+n;
-                        }
-                    }//While
+//                        n = dis.read(b);
+////                        
+//                        dos.write(b, 0, n);
+//                        dos.flush();
+//                        tam -= n;
+//
+//                    }//While
                     System.out.println("Archivo " + (i+1)+" recibido.");
-                    dos.close();
+                    System.out.println("Archivo " + (i+1)+" recibido.");
+                    
                 }
-
+                //dos.close();
                 dis.close();
                 cl.close();
             }
