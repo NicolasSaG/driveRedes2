@@ -34,7 +34,6 @@ public class Ventana extends JFrame {
     
     private File[] files;
     private int porcentaje;
-    private Timer t;
     public Ventana(){
         files = null;
         init();
@@ -221,7 +220,6 @@ public class Ventana extends JFrame {
                         //dos.flush();
                         enviados = enviados+n;
                         lbl_porcentaje.setText("enviado " +enviados +"de " + file.length());
-                        Thread.sleep(2000);
                         
                     }else{
                         System.out.println("nloque normal enviado");
@@ -231,7 +229,6 @@ public class Ventana extends JFrame {
                         //dos.flush();
                         enviados = enviados+n;
                         lbl_porcentaje.setText("enviado " +enviados +"de " + file.length());
-                        Thread.sleep(2000);
                         
                     }
                 }
