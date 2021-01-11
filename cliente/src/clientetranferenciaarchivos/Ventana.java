@@ -1,7 +1,6 @@
 package clientetranferenciaarchivos;
 
 import java.awt.Container;
-import java.awt.event.ActionEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.DataInputStream;
@@ -27,7 +26,7 @@ public class Ventana extends JFrame {
     
     Socket cl;
     DataOutputStream dos;
-    DataInputStream dis;// = new DataInputStream(new FileInputStream(archivo));    
+    DataInputStream dis;
     
     private final int puerto = 7001;
     private final String host = "127.0.0.1";
@@ -58,7 +57,6 @@ public class Ventana extends JFrame {
         btn_seleccionarArchivos.addMouseListener(new MouseAdapter() {
                     @Override
                     public void mousePressed(MouseEvent evt) {
-                        //Metodo a llamar cuando se pulse el botón
                         abrirSelectorDeArchivos(evt);
                     }
                 });        
@@ -67,11 +65,6 @@ public class Ventana extends JFrame {
         txta_archivos = new JTextArea();
         txta_archivos.setBounds(10,100,460,400);
         contenedor.add(txta_archivos);
-        
-        /*progressBar = new JProgressBar(SwingConstants.HORIZONTAL);
-        progressBar.setBounds(10,600,460,50);
-        progressBar.setMinimum(0);
-        contenedor.add(progressBar);*/
         
         lbl_porcentaje = new JLabel();
         lbl_porcentaje.setText("Numero de bytes neviados");
@@ -92,12 +85,6 @@ public class Ventana extends JFrame {
                     }
                 });        
         contenedor.add(btn_enviarArchivos);
-        
-//        progressBar = new JProgressBar(0,100);
-//        progressBar.setBounds(150, 510, 180, 30);
-//        progressBar.setValue(0);
-//        progressBar.setStringPainted(true);
-//        contenedor.add(progressBar);
         
         lbl_tamBuffer = new JLabel();
         lbl_tamBuffer.setText("Tamaño de buffer (En Bytes):");

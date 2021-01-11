@@ -53,16 +53,11 @@ public class Repetidor {
                     dos = new DataOutputStream(new FileOutputStream(nombreArchivo));
                     long recibidos = 0;
                     int n, porcentaje;
-                    while(recibidos < tam){
-                        n = dis.read(b);
+                    while(tam > 0 && (n = dis.read(b, 0, (int)Math.min(b.length, tam))) != -1){   
                         dos.write(b, 0, n);
-                        dos.flush();
-                        
-                        //enviados a otro
                         dosRep.write(b, 0, n);
-                        dosRep.flush();
-                        
-                        recibidos = recibidos + n;
+                        //dos.flush();
+                        tam -= n;
                     }//While
                     System.out.println("Archivo " + (i+1)+" recibido.");
                     dos.close();
