@@ -1,6 +1,7 @@
 package clientetranferenciaarchivos;
 
 import java.awt.Container;
+import java.awt.event.ActionEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.DataInputStream;
@@ -18,7 +19,7 @@ import javax.swing.text.AbstractDocument;
  */
 public class Ventana extends JFrame {
     JButton btn_seleccionarArchivos, btn_enviarArchivos;
-    JLabel lbl_instruccion, lbl_tamBuffer ;
+    JLabel lbl_instruccion, lbl_tamBuffer,lbl_porcentaje ;
     JTextArea txta_archivos;
     JTextField txtf_tamBuffer;
     JCheckBox chkbx_nagle;
@@ -32,6 +33,8 @@ public class Ventana extends JFrame {
     private final String host = "127.0.0.1";
     
     private File[] files;
+    private int porcentaje;
+    private Timer t;
     public Ventana(){
         files = null;
         init();
@@ -39,7 +42,7 @@ public class Ventana extends JFrame {
     
     public void init(){
         Container contenedor = getContentPane();
-        setBounds(0, 0, 500, 600);
+        setBounds(0, 0, 500, 700);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         setLayout(null);
         setLocationRelativeTo(null);
@@ -65,6 +68,16 @@ public class Ventana extends JFrame {
         txta_archivos = new JTextArea();
         txta_archivos.setBounds(10,100,460,400);
         contenedor.add(txta_archivos);
+        
+        /*progressBar = new JProgressBar(SwingConstants.HORIZONTAL);
+        progressBar.setBounds(10,600,460,50);
+        progressBar.setMinimum(0);
+        contenedor.add(progressBar);*/
+        
+        lbl_porcentaje = new JLabel();
+        lbl_porcentaje.setText("Numero de bytes neviados");
+        lbl_porcentaje.setBounds(10,600,200,30);
+        contenedor.add(lbl_porcentaje);
         
         btn_enviarArchivos = new JButton("Enviar");
         btn_enviarArchivos.setBounds(360, 510, 100, 30);
@@ -196,8 +209,10 @@ public class Ventana extends JFrame {
                 byte[] b = new byte[Integer.parseInt(txtf_tamBuffer.getText())];
                 long enviados = 0;
                 int porcentaje, n;
+                //progressBar.setMaximum((int) file.length());
                 while (enviados < file.length()){
                     System.out.println("enviado " +enviados +"de " + file.length());
+                    lbl_porcentaje.setText("enviado " +enviados +"de " + file.length());
                     if(enviados + Integer.parseInt(txtf_tamBuffer.getText()) >= file.length()){
                         System.out.println("ultimo bloque enviado");
                         n = dis.read(b, 0, (int) (file.length() - enviados));   
@@ -205,6 +220,9 @@ public class Ventana extends JFrame {
                         dos.write(b, 0, n);
                         //dos.flush();
                         enviados = enviados+n;
+                        lbl_porcentaje.setText("enviado " +enviados +"de " + file.length());
+                        Thread.sleep(2000);
+                        
                     }else{
                         System.out.println("nloque normal enviado");
                         n = dis.read(b);  
@@ -212,9 +230,12 @@ public class Ventana extends JFrame {
                         dos.write(b, 0, n);
                         //dos.flush();
                         enviados = enviados+n;
+                        lbl_porcentaje.setText("enviado " +enviados +"de " + file.length());
+                        Thread.sleep(2000);
+                        
                     }
                 }
-                System.out.print("\n\nArchivo enviado");      
+                System.out.print("\n\nArchivo enviado");
             }
             dis.close(); //checar si se hace con cada archivo o hasta el final
         } catch (Exception e) {
@@ -224,4 +245,7 @@ public class Ventana extends JFrame {
         
     }
     
+    public void Barra_Progreso(int n){
+        progressBar.setValue(n);
+    }
 }
