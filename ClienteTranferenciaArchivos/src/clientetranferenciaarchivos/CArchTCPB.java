@@ -11,6 +11,7 @@ import javax.swing.JFrame;
  */
 
 public class CArchTCPB {
+    private static int porcentaje;
     public static void main(String[] args){
         try{
             BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
@@ -34,7 +35,7 @@ public class CArchTCPB {
                 dos.flush();
                 byte[] b = new byte[1024];
                 long enviados = 0;
-                int porcentaje, n;
+                int n;
                 while (enviados < tam){
                      n = dis.read(b);
                      dos.write(b,0,n);
