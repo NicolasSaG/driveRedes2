@@ -193,7 +193,6 @@ class Canvas_Demo {
     public static JTextArea txinp;
     public static int xpos = 0, ypos = 0;
     String url = "D:\\DownLoads\\Video\\freerun.MP4"; //URL de prueba
-
     // Constructor
     public Canvas_Demo() {
 
