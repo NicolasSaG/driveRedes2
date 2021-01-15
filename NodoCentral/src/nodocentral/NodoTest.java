@@ -17,16 +17,15 @@ import java.net.Socket;
 public class NodoTest {
     public static void main(String[] args) {
         try { //siempre dentre de bloques try catch cuando trabajemos con sockets
-            Socket cl = new Socket("127.0.0.1", 8999);
+            Socket cl = new Socket("127.0.0.1", 1255);
+            
             BufferedReader stdIn = new BufferedReader(new InputStreamReader(System.in));
             PrintWriter out = new PrintWriter(cl.getOutputStream(), true); 
             BufferedReader in = new BufferedReader(new InputStreamReader(cl.getInputStream()));
             
-            String msj = "";
+            String msj = "transmitir:peli1:asd";
             out.println(msj);
-            System.out.println("Eco: " + in.readLine()); 
-            if(msj.equals("Adios"))
-            
+            System.out.println("recibido del nodo central: " + in.readLine());
             
             
             //primero cerrar flujos
