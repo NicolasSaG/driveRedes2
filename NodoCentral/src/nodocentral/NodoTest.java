@@ -23,7 +23,8 @@ public class NodoTest {
             PrintWriter out = new PrintWriter(cl.getOutputStream(), true); 
             BufferedReader in = new BufferedReader(new InputStreamReader(cl.getInputStream()));
             
-            String msj = "transmitir:peli1:asd";
+            //String msj = "transmitir:peli1:asd";
+            String msj = "obtenerPeliculas";
             out.println(msj);
             System.out.println("recibido del nodo central: " + in.readLine());
             

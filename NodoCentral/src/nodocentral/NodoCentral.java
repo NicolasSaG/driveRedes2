@@ -24,7 +24,6 @@ public class NodoCentral {
             System.out.println("Esperando conexion de nodos...");
             
             while(true){
-                leerCatalogoDePeliculas();
                 Socket cl = s.accept();
                 System.out.println("Conexion establecida con nodo " + cl.getInetAddress() + ":" + cl.getPort());
                 
@@ -35,24 +34,21 @@ public class NodoCentral {
                 
                 msjRecibido = in.readLine(); 
                 
-                    if(msjRecibido.substring(0,11).equals("transmitir:")){//transmitir:pelicula:ip
-                        String pelicula = obtenerNombrePelicula(msjRecibido.substring(11));
-                        //out.println("Aqui esta el servidooor");
-                        //buscar pelicula
-                        if(buscarPelicula(pelicula)){//agregar nuevo nodo a la pelicula
-                            nodos.get(pelicula).anadirNodo(cl.getInetAddress());
-                            System.out.println("alguien ya esta transmitiendo la pelicula");
-                        }else{//agregar nuevo elemento a la hashtable
-                            nodos.put(pelicula, new Nodos(cl.getInetAddress()));
-                            out.println("Te has registrado en nodo central exitosamente");
-                            System.out.println("Te has registrado como nodo");
-                        }
+                if(msjRecibido.substring(0,11).equals("transmitir:")){//transmitir:pelicula:ip
+                    String pelicula = obtenerNombrePelicula(msjRecibido.substring(11));
+                    //out.println("Aqui esta el servidooor");
+                    //buscar pelicula
+                    if(buscarPelicula(pelicula)){//agregar nuevo nodo a la pelicula
+                        nodos.get(pelicula).anadirNodo(cl.getInetAddress());
+                        System.out.println("alguien ya esta transmitiendo la pelicula");
+                    }else{//agregar nuevo elemento a la hashtable
+                        nodos.put(pelicula, new Nodos(cl.getInetAddress()));
+                        out.println("Te has registrado en nodo central exitosamente");
+                        System.out.println("Te has registrado como nodo");
+                    } 
+                }else if(msjRecibido.substring(0,16).equals("obtenerPeliculas")){//enviar catalogo de peliculas
                         
-                        
-                        
-                    }else if(msjRecibido.substring(0,12).equals("obtenerNodos")){//nodos que transmitan x pelicula
-                        
-                    }
+                }
  
                 
                 in.close();
@@ -63,7 +59,6 @@ public class NodoCentral {
         } catch (Exception e) {
         }
     }
-    
     
     public String obtenerNombrePelicula(String text){
         String nombrePelicula = "";
@@ -86,10 +81,27 @@ public class NodoCentral {
     
     private void leerCatalogoDePeliculas(){
         Set<String> keys = nodos.keySet();
-        System.out.println("Inicio de catalago de peliculas");
+        System.out.println("Peliculas:");
         for (String key: keys) {
             System.out.println(key);
         }
-        System.out.println("Fin de catalgo de peliculas");
+        System.out.println("--------");
+    }
+    
+    private int obtenerNumeroPeliculas(){
+        return nodos.keySet().size();
+    }
+    
+    private String obtenerCatalogoDePeliculas(){
+        Set<String> keys = nodos.keySet();
+        String peliculas = "";
+        if(obtenerNumeroPeliculas() > 0){
+            for (String key : keys) {
+                peliculas += nodos.get(key)+",";
+            }
+        }else{
+            peliculas += ",";
+        }
+        return peliculas;
     }
 }
