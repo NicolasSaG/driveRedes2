@@ -29,7 +29,7 @@ public class Ventana extends JFrame {
     DataInputStream dis;
     
     private final int puerto = 7001;
-    private final String host = "127.0.0.1";
+    private final String host = "189.188.198.81";
     
     private File[] files;
     private int porcentaje;
