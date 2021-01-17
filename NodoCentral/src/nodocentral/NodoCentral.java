@@ -48,6 +48,11 @@ public class NodoCentral {
                     String nombrePelicula = msjRecibido.substring(16);
                     dejarTransmitir(nombrePelicula);
                     out.print("Se elimino la informacion del nodo central");
+                }else if(msjRecibido.substring(0,8).equals("obtener:")){//enviar catalogo de peliculas
+                    String pelicula = msjRecibido.substring(8);
+                    String ip = obtenerIp(pelicula);
+                    out.println(ip);  
+                    System.out.println("ip enviada");
                 }else if(msjRecibido.substring(0,16).equals("obtenerPeliculas")){//enviar catalogo de peliculas
                     String pelis = obtenerCatalogoDePeliculas();
                     out.println(pelis);  
@@ -62,6 +67,15 @@ public class NodoCentral {
             }
         } catch (Exception e) {
         }
+    }
+    
+    private String obtenerIp(String pelicula){
+        String ip = "";
+        if(nodos.containsKey(pelicula)){
+            ip = nodos.get(pelicula).getHostAddress();
+        }
+        
+        return ip;
     }
     
     private String obtenerNombrePelicula(String text){

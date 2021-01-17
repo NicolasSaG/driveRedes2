@@ -8,6 +8,8 @@ package nodocentral;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
+import java.net.Inet4Address;
+import java.net.InetAddress;
 import java.net.Socket;
 
 /**
@@ -30,6 +32,10 @@ public class NodoTest {
             //para degar de transmitir:
             //se envia: dejarTransmitir:nombrepelicula
             //retorna: Se elimino la informacion del nodo central
+            
+            //para obtener la ip de una pelicula:
+            //se envia: obtener:nombrepelicula
+            //se regresa string con la ip que la trasnmite
             
             //para obtener las peliculas
             String msj = "obtenerPeliculas";
