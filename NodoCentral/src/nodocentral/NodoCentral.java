@@ -3,6 +3,7 @@ package nodocentral;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
+import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.Hashtable;
@@ -14,7 +15,7 @@ import java.util.Set;
  */
 public class NodoCentral {
 
-    Hashtable<String, Nodos> nodos;
+    Hashtable<String, InetAddress> nodos;
     public void init() {
         nodos = new Hashtable(); 
         try {
@@ -38,14 +39,11 @@ public class NodoCentral {
                     String pelicula = obtenerNombrePelicula(msjRecibido.substring(11));
                     //out.println("Aqui esta el servidooor");
                     //buscar pelicula
-                    if(buscarPelicula(pelicula)){//agregar nuevo nodo a la pelicula
-                        nodos.get(pelicula).anadirNodo(cl.getInetAddress());
-                        System.out.println("alguien ya esta transmitiendo la pelicula");
-                    }else{//agregar nuevo elemento a la hashtable
-                        nodos.put(pelicula, new Nodos(cl.getInetAddress()));
+                    if(!buscarPelicula(pelicula)){//agregar nuevo nodo a la pelicula
+                        nodos.put(pelicula, cl.getInetAddress());
                         out.println("Te has registrado en nodo central exitosamente");
-                        System.out.println("Te has registrado como nodo");
-                    } 
+                        System.out.println("Te has registrado como nodo");     
+                    }
                 }else if(msjRecibido.substring(0,16).equals("obtenerPeliculas")){//enviar catalogo de peliculas
                     String pelis = obtenerCatalogoDePeliculas();
                     out.println(pelis);  
