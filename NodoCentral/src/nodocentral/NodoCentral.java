@@ -44,6 +44,9 @@ public class NodoCentral {
                         out.println("Te has registrado en nodo central exitosamente");
                         System.out.println("Te has registrado como nodo");     
                     }
+                }else if(msjRecibido.substring(0,16).equals("dejarTransmitir:")){
+                    String nombrePelicula = msjRecibido.substring(16);
+                    dejarTransmitir(nombrePelicula);
                 }else if(msjRecibido.substring(0,16).equals("obtenerPeliculas")){//enviar catalogo de peliculas
                     String pelis = obtenerCatalogoDePeliculas();
                     out.println(pelis);  
@@ -60,7 +63,7 @@ public class NodoCentral {
         }
     }
     
-    public String obtenerNombrePelicula(String text){
+    private String obtenerNombrePelicula(String text){
         String nombrePelicula = "";
         try {
             int finNombrePelicula = text.indexOf(":");
@@ -103,5 +106,14 @@ public class NodoCentral {
             peliculas += ",";
         }
         return peliculas;
+    }
+    
+    private void dejarTransmitir(String pelicula){
+        if(nodos.containsKey(pelicula)){
+            nodos.remove(pelicula);
+        }else{
+            System.out.println("No existe esa pelicula para remover");
+        }
+        
     }
 }
