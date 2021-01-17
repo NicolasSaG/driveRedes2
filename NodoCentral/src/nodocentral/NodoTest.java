@@ -23,8 +23,16 @@ public class NodoTest {
             PrintWriter out = new PrintWriter(cl.getOutputStream(), true); 
             BufferedReader in = new BufferedReader(new InputStreamReader(cl.getInputStream()));
             
-            //String msj = "transmitir:peli1:asd";
+            //para que alguien transmita se envia la siguiente cadena:
+            //String registrarPelicula = "transmitir:nombre_de_pelicula";
+            //regresa un:ok si si se registro la pelicula en el nodo central
+            
+            
+            
+            //para obtener las peliculas
             String msj = "obtenerPeliculas";
+            //regresa: nombrepelicula1,nombrepelicula2,...,
+            //si no hay peliculas regresa solo una ,
             out.println(msj);
             System.out.println("recibido del nodo central: " + in.readLine());
             

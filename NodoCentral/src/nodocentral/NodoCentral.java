@@ -33,7 +33,7 @@ public class NodoCentral {
                 String msjRecibido;
                 
                 msjRecibido = in.readLine(); 
-                
+                //transmitir:nombrepelicula
                 if(msjRecibido.substring(0,11).equals("transmitir:")){//transmitir:pelicula:ip
                     String pelicula = obtenerNombrePelicula(msjRecibido.substring(11));
                     //out.println("Aqui esta el servidooor");
