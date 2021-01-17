@@ -47,7 +47,9 @@ public class NodoCentral {
                         System.out.println("Te has registrado como nodo");
                     } 
                 }else if(msjRecibido.substring(0,16).equals("obtenerPeliculas")){//enviar catalogo de peliculas
-                        
+                    String pelis = obtenerCatalogoDePeliculas();
+                    out.println(pelis);  
+                    System.out.println("Peliculas enviadas");
                 }
  
                 
