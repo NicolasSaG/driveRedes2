@@ -47,6 +47,7 @@ public class NodoCentral {
                 }else if(msjRecibido.substring(0,16).equals("dejarTransmitir:")){
                     String nombrePelicula = msjRecibido.substring(16);
                     dejarTransmitir(nombrePelicula);
+                    out.print("Se elimino la informacion del nodo central");
                 }else if(msjRecibido.substring(0,16).equals("obtenerPeliculas")){//enviar catalogo de peliculas
                     String pelis = obtenerCatalogoDePeliculas();
                     out.println(pelis);  

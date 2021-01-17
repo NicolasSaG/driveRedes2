@@ -27,7 +27,9 @@ public class NodoTest {
             //String registrarPelicula = "transmitir:nombre_de_pelicula";
             //regresa un:ok si si se registro la pelicula en el nodo central
             
-            
+            //para degar de transmitir:
+            //se envia: dejarTransmitir:nombrepelicula
+            //retorna: Se elimino la informacion del nodo central
             
             //para obtener las peliculas
             String msj = "obtenerPeliculas";
