@@ -1,3 +1,12 @@
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.PrintWriter;
+import java.net.Socket;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.JButton;
+
 /*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
@@ -10,7 +19,8 @@
  */
 public class ventanaInicio extends javax.swing.JFrame {
     
-    private String ip,puerto,username;
+    private String ip,username;
+    private int puerto;
     catalogoPeliculas catalogo;
     
     /**
@@ -19,7 +29,6 @@ public class ventanaInicio extends javax.swing.JFrame {
     public ventanaInicio() {
         initComponents();
         ip = "";
-        puerto = "";
         username="";
     }
     
@@ -160,21 +169,21 @@ public class ventanaInicio extends javax.swing.JFrame {
 
     private void btn_EntrarMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btn_EntrarMouseClicked
         ip = txtf_IP.getText();
-        puerto = txtf_Puerto.getText();
+        puerto = Integer.parseInt(txtf_Puerto.getText());
         username = txtf_Username.getText();
         System.out.println("Datos del nodo central");
         System.out.println("IP: " + ip);
         System.out.println("Puerto: " + puerto);
         System.out.println("Username: " + username);
-        catalogo = new catalogoPeliculas(username);
         this.setVisible(false);
         this.dispose();
+        catalogo = new catalogoPeliculas(username,ip,puerto);
     }//GEN-LAST:event_btn_EntrarMouseClicked
 
     /**
      * @param args the command line arguments
      */
-    public static void main(String args[]) {
+   public static void main(String args[]) {
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
         /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
@@ -206,6 +215,20 @@ public class ventanaInicio extends javax.swing.JFrame {
         });
     }
 
+    public String getIp() {
+        return ip;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public int getPuerto() {
+        return puerto;
+    }
+
+
+    
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btn_Entrar;
     private javax.swing.JLabel jLabel1;
