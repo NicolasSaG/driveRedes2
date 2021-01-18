@@ -45,11 +45,12 @@ public class NodoCentral {
                         System.out.println("Te has registrado como nodo");     
                     }else{
                         System.out.println("La pelicula ya existe");
+                        out.println("No se pudo registrar, la pelicula ya existe");
                     }
                 }else if(msjRecibido.substring(0,16).equals("dejarTransmitir:")){
                     String nombrePelicula = msjRecibido.substring(16);
                     dejarTransmitir(nombrePelicula);
-                    out.print("Se elimino la informacion del nodo central");
+                    out.println("Se elimino la informacion del nodo central");
                 }else if(msjRecibido.substring(0,8).equals("obtener:")){//enviar catalogo de peliculas
                     String pelicula = msjRecibido.substring(8);
                     String ip = obtenerIp(pelicula);

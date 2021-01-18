@@ -9,7 +9,10 @@ import java.util.logging.Logger;
 import javax.swing.DefaultListModel;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
+import javax.swing.JOptionPane;
 import javax.swing.JTextField;
+import videoReceptor.JavaClient;
+import videoTransmisor.JavaServer;
 
 /*
  * To change this license header, choose License Headers in Project Properties.
@@ -23,7 +26,7 @@ import javax.swing.JTextField;
  */
 public class catalogoPeliculas extends javax.swing.JFrame {
 
-    String username,ip,peliculaSeleccionada;
+    String username,ip,peliculaSeleccionada,peliculaTransmitir;
     int puerto;
     String msj = "obtenerPeliculas";
     ImageIcon iconobtnBuscar = new ImageIcon("src/Iconos/lupa.jpg");
@@ -33,6 +36,8 @@ public class catalogoPeliculas extends javax.swing.JFrame {
     Socket cl;
     PrintWriter out;
     BufferedReader in;
+    JavaServer s;
+    
     
     /**
      * Creates new form catalogoPeliculas
@@ -44,6 +49,7 @@ public class catalogoPeliculas extends javax.swing.JFrame {
     public catalogoPeliculas(String nombre, String dir_IP, int pto){
         initComponents();
         peliculaSeleccionada = "";
+        peliculaTransmitir = "";
         username = nombre;
         ip = dir_IP;
         puerto = pto;
@@ -53,7 +59,7 @@ public class catalogoPeliculas extends javax.swing.JFrame {
         Icon iconoRefresh = new ImageIcon(iconobtnRefresh.getImage().getScaledInstance(btn_Refresh.getWidth(),btn_Refresh.getHeight(),Image.SCALE_SMOOTH));
         lbl_Buscar.setIcon(iconoBuscar);
         btn_Refresh.setIcon(iconoRefresh);
-        llenarLista();
+        //llenarLista();
         initSocket();
                     
             //para que alguien transmita se envia la siguiente cadena:
@@ -105,6 +111,22 @@ public class catalogoPeliculas extends javax.swing.JFrame {
         peliculasDisponibles.addElement("UP");
         peliculasDisponibles.addElement("La cita perfecta");
         peliculasDisponibles.addElement("La cita perfecta 2");
+        jlst_Peliculas.setModel(peliculasDisponibles);
+    }
+    
+    public void actualizarCatalogo(String peliculasActualizadas){
+    
+        String[] peliculas = peliculasActualizadas.split(",");
+        peliculasDisponibles = new DefaultListModel();
+        jlst_Peliculas.removeAll();
+        for(String pelicula:peliculas)
+        {
+            pelicula.replace(" ","");
+            pelicula.trim();
+            if(!pelicula.contains("obtenerPeliculas") || pelicula.isEmpty()){
+                peliculasDisponibles.addElement(pelicula);
+            }
+        }
         jlst_Peliculas.setModel(peliculasDisponibles);
     }
     /**
@@ -251,21 +273,37 @@ public class catalogoPeliculas extends javax.swing.JFrame {
 
     private void btn_RefreshMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btn_RefreshMouseClicked
         System.out.println("Boton refresh");
-        msj="Refresh";
+        initSocket();
+        msj="obtenerPeliculas";
         out.println(msj);
         System.out.println("Mensaje enviaddo: " + msj);
-        out.flush(); 
-        msj="";        
+        try {
+            msj=in.readLine();
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        }
+        System.out.println("respuesta de servidor:"+ msj);
+        actualizarCatalogo(msj);
     }//GEN-LAST:event_btn_RefreshMouseClicked
 
     private void btn_TransmitirMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btn_TransmitirMouseClicked
         System.out.println("Boton para Transmitir");
+        peliculaTransmitir = JOptionPane.showInputDialog(null, "Titulo de pelicula a transmitir", "Transmitir pelicula",JOptionPane.QUESTION_MESSAGE);
         initSocket();
-        msj="transmitir:pelicula1";
+        msj="transmitir:" + peliculaTransmitir;
         out.println(msj);
         System.out.println("Mensaje enviaddo: " + msj);
-
-        msj="";
+        try {
+            msj=in.readLine();
+        } catch (IOException ex) {
+            Logger.getLogger(catalogoPeliculas.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        System.out.println("respuesta de servidor:"+ msj);
+        try {
+            JavaServer s = new JavaServer();
+        } catch (Exception ex) {
+            Logger.getLogger(catalogoPeliculas.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }//GEN-LAST:event_btn_TransmitirMouseClicked
 
     private void jtxt_BuscadorKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jtxt_BuscadorKeyReleased
@@ -293,14 +331,25 @@ public class catalogoPeliculas extends javax.swing.JFrame {
     }//GEN-LAST:event_jlst_PeliculasValueChanged
 
     private void jlst_PeliculasMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jlst_PeliculasMouseClicked
-       if (evt.getClickCount() == 2) { 
+       initSocket();
+        if (evt.getClickCount() == 2) { 
             peliculaSeleccionada = jlst_Peliculas.getSelectedValue().toString();
             System.out.println("Pelicula seleccionada: " + peliculaSeleccionada);
-            msj="pelicula Seleccionada";
+            msj="obtener:" + peliculaSeleccionada;
             out.println(msj);
             System.out.println("Mensaje enviaddo: " + msj);
             out.flush(); 
-            msj="";
+             try {
+            msj=in.readLine();
+            } catch (IOException ex) {
+            Logger.getLogger(catalogoPeliculas.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            System.out.println("respuesta de servidor:"+ msj);
+           try {
+               JavaClient.init(msj);
+           } catch (Exception ex) {
+               Logger.getLogger(catalogoPeliculas.class.getName()).log(Level.SEVERE, null, ex);
+           }
         } 
     }//GEN-LAST:event_jlst_PeliculasMouseClicked
 
