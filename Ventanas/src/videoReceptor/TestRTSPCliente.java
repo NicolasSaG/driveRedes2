@@ -16,7 +16,7 @@ public class TestRTSPCliente {
      */
     public static void main(String[] args) throws Exception {
         // TODO code application logic here
-        JavaClient.init("127.0.0.1");
+        new JavaClient("127.0.0.1");
     }
     
 }

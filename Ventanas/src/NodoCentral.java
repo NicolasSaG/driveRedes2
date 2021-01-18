@@ -23,53 +23,71 @@ public class NodoCentral {
             System.out.println("Esperando conexion de nodos...");
             
             while(true){
-                Socket cl = s.accept();
-                System.out.println("Conexion establecida con nodo " + cl.getInetAddress() + ":" + cl.getPort());
-                
-                PrintWriter out = new PrintWriter(cl.getOutputStream(), true);//con println se auto flushea 
-                BufferedReader in = new BufferedReader(new InputStreamReader(cl.getInputStream()));
-                
-                String msjRecibido;
-                
-                msjRecibido = in.readLine(); 
-                System.out.println(msjRecibido);
-                //transmitir:nombrepelicula
-                if(msjRecibido.substring(0,11).equals("transmitir:")){//transmitir:pelicula:ip
-                    System.out.println("Transmitir pelicula: "+msjRecibido);
-                    String pelicula = obtenerNombrePelicula(msjRecibido);
-                    //out.println("Aqui esta el servidooor");
-                    //buscar pelicula
-                    if(!buscarPelicula(pelicula)){//agregar nuevo nodo a la pelicula
-                        nodos.put(pelicula, cl.getInetAddress());
-                        System.out.println("Nombre de pelicula: |"+pelicula+"|");
-                        out.println("Te has registrado en nodo central exitosamente");
-                        System.out.println("Te has registrado como nodo");     
+                Socket cl = null;
+                PrintWriter out = null;
+                BufferedReader in = null;
+                try {
+                     cl = s.accept();
+                    System.out.println("Conexion establecida con nodo " + cl.getInetAddress() + ":" + cl.getPort());
+
+                     out = new PrintWriter(cl.getOutputStream(), true);//con println se auto flushea 
+                     in = new BufferedReader(new InputStreamReader(cl.getInputStream()));
+
+                    String msjRecibido;
+                    System.out.println("antes de recibir mensaje...");
+                    msjRecibido = in.readLine(); 
+                    System.out.println("despues de recibir ...");
+                    System.out.println(msjRecibido);
+                    //transmitir:nombrepelicula
+                    if(msjRecibido.substring(0,11).equals("transmitir:")){//transmitir:pelicula:ip
+                        System.out.println("Transmitir pelicula: "+msjRecibido);
+                        String pelicula = obtenerNombrePelicula(msjRecibido);
+                        //out.println("Aqui esta el servidooor");
+                        //buscar pelicula
+                        if(!buscarPelicula(pelicula)){//agregar nuevo nodo a la pelicula
+                            nodos.put(pelicula, cl.getInetAddress());
+                            System.out.println("Nombre de pelicula: |"+pelicula+"|");
+                            out.println("Te has registrado en nodo central exitosamente");
+                            System.out.println("Te has registrado como nodo");     
+                        }else{
+                            System.out.println("La pelicula ya existe");
+                            out.println("No se pudo registrar, la pelicula ya existe");
+                        }
+                    }else if(msjRecibido.substring(0,16).equals("dejarTransmitir:")){
+                        String nombrePelicula = msjRecibido.substring(16);
+                        dejarTransmitir(nombrePelicula);
+                        out.println("Se elimino la informacion del nodo central");
+                    }else if(msjRecibido.substring(0,8).equals("obtener:")){//enviar catalogo de peliculas
+                        System.out.println("Inicio de obtener...");
+                        String pelicula = msjRecibido.substring(8);
+                        System.out.println("Peliculla obtener: " + pelicula);
+                        String ip = obtenerIp(pelicula);
+                        System.out.println("ip de pelicula" + ip);
+                        out.println(ip);  
+                        System.out.println("ip enviada");
+                    }else if(msjRecibido.substring(0,16).equals("obtenerPeliculas")){//enviar catalogo de peliculas
+                        String pelis = obtenerCatalogoDePeliculas();
+                        out.println(pelis);  
+                        System.out.println("Peliculas enviadas");
                     }else{
-                        System.out.println("La pelicula ya existe");
-                        out.println("No se pudo registrar, la pelicula ya existe");
+                        System.out.println("Estoy entrando en otra cosa");
                     }
-                }else if(msjRecibido.substring(0,16).equals("dejarTransmitir:")){
-                    String nombrePelicula = msjRecibido.substring(16);
-                    dejarTransmitir(nombrePelicula);
-                    out.println("Se elimino la informacion del nodo central");
-                }else if(msjRecibido.substring(0,8).equals("obtener:")){//enviar catalogo de peliculas
-                    String pelicula = msjRecibido.substring(8);
-                    String ip = obtenerIp(pelicula);
-                    out.println(ip);  
-                    System.out.println("ip enviada");
-                }else if(msjRecibido.substring(0,16).equals("obtenerPeliculas")){//enviar catalogo de peliculas
-                    String pelis = obtenerCatalogoDePeliculas();
-                    out.println(pelis);  
-                    System.out.println("Peliculas enviadas");
+
+
+                    in.close();
+                    out.flush();
+                    out.close();
+                    cl.close();
+                } catch (Exception e) {
+                }finally{
+                    in.close();
+                    out.flush();
+                    out.close();
+                    cl.close();
                 }
- 
-                
-                in.close();
-                out.flush();
-                out.close();
-                cl.close();
             }
         } catch (Exception e) {
+            e.printStackTrace();
         }
     }
     

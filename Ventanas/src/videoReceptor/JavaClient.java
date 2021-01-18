@@ -20,10 +20,7 @@ import java.net.Socket;
 public class JavaClient {
 
     public static DatagramSocket ds;
-    public  JavaClient() throws Exception{
-    }
-    
-    public static void init(String ip) throws Exception {
+    public  JavaClient(String ip) throws Exception{
         try {
             ds = new DatagramSocket();
 

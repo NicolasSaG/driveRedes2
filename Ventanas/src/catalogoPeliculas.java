@@ -341,10 +341,10 @@ public class catalogoPeliculas extends javax.swing.JFrame implements Runnable{
             msj="obtener:" + peliculaSeleccionada;
             out.println(msj);
             System.out.println("Mensaje enviaddo: " + msj); 
-             try {
-            msj=in.readLine();
+            try {
+                msj=in.readLine();
             } catch (IOException ex) {
-            Logger.getLogger(catalogoPeliculas.class.getName()).log(Level.SEVERE, null, ex);
+                ex.printStackTrace();
             }
             System.out.println("respuesta de servidor:"+ msj);
            try {
@@ -400,9 +400,11 @@ public class catalogoPeliculas extends javax.swing.JFrame implements Runnable{
             out.println(msj);
             System.out.println("Mensaje enviaddo: " + msj);
             actualizarCatalogo(msj);
+            videoTransmitir = false;
         }else if(videoVer){
             try {
-                JavaClient.init(ipAConectarse);
+                new JavaClient(ipAConectarse);
+                videoVer = false;
             } catch (Exception e) {
                 System.out.println("Error viendo un video");
                 e.printStackTrace();
