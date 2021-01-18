@@ -1,4 +1,11 @@
 import java.awt.Image;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.PrintWriter;
+import java.net.Socket;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.DefaultListModel;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
@@ -16,10 +23,17 @@ import javax.swing.JTextField;
  */
 public class catalogoPeliculas extends javax.swing.JFrame {
 
-    String username,peliculaSeleccionada;
+    String username,ip,peliculaSeleccionada;
+    int puerto;
+    String msj = "obtenerPeliculas";
     ImageIcon iconobtnBuscar = new ImageIcon("src/Iconos/lupa.jpg");
     ImageIcon iconobtnRefresh = new ImageIcon("src/Iconos/refresh.png");
     DefaultListModel<String> peliculasDisponibles = new DefaultListModel();
+    boolean transmitir=false,verPelicula=false,refresh=false;
+    Socket cl;
+    PrintWriter out;
+    BufferedReader in;
+    
     /**
      * Creates new form catalogoPeliculas
      */
@@ -27,10 +41,12 @@ public class catalogoPeliculas extends javax.swing.JFrame {
         initComponents();
     }
     
-    public catalogoPeliculas(String nombre){
+    public catalogoPeliculas(String nombre, String dir_IP, int pto){
         initComponents();
         peliculaSeleccionada = "";
         username = nombre;
+        ip = dir_IP;
+        puerto = pto;
         this.setVisible(true);
         lbl_Username.setText(username);
         Icon iconoBuscar = new ImageIcon(iconobtnBuscar.getImage().getScaledInstance(lbl_Buscar.getWidth(),lbl_Buscar.getHeight(),Image.SCALE_SMOOTH));
@@ -38,6 +54,34 @@ public class catalogoPeliculas extends javax.swing.JFrame {
         lbl_Buscar.setIcon(iconoBuscar);
         btn_Refresh.setIcon(iconoRefresh);
         llenarLista();
+        initSocket();
+    }
+    
+    public void initSocket(){
+        
+    try { //siempre dentre de bloques try catch cuando trabajemos con sockets
+            
+            cl = new Socket(ip,puerto);
+            
+            out = new PrintWriter(cl.getOutputStream(), true); 
+            in = new BufferedReader(new InputStreamReader(cl.getInputStream()));
+            
+            //para que alguien transmita se envia la siguiente cadena:
+            //String registrarPelicula = "transmitir:nombre_de_pelicula";
+            //regresa un:ok si si se registro la pelicula en el nodo central
+            
+            //para degar de transmitir:
+            //se envia: dejarTransmitir:nombrepelicula
+            //retorna: Se elimino la informacion del nodo central
+            msj = "obtenerPeliculas";
+            out.println(msj);
+            out.flush(); 
+            msj="";
+            
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
     
     public void llenarLista(){
@@ -81,6 +125,11 @@ public class catalogoPeliculas extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Catalogo de Peliculas");
+        addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowClosed(java.awt.event.WindowEvent evt) {
+                formWindowClosed(evt);
+            }
+        });
 
         lbl_Username.setFont(new java.awt.Font("Verdana", 1, 11)); // NOI18N
         lbl_Username.setText("userName");
@@ -176,8 +225,8 @@ public class catalogoPeliculas extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(lbl_Peliculas)
                 .addGap(18, 18, 18)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btn_Refresh, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(btn_Refresh, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jtxt_Buscador, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(lbl_Buscar, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
@@ -198,10 +247,20 @@ public class catalogoPeliculas extends javax.swing.JFrame {
 
     private void btn_RefreshMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btn_RefreshMouseClicked
         System.out.println("Boton refresh");
+        msj="Refresh";
+        out.println(msj);
+        System.out.println("Mensaje enviaddo: " + msj);
+        out.flush(); 
+        msj="";        
     }//GEN-LAST:event_btn_RefreshMouseClicked
 
     private void btn_TransmitirMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btn_TransmitirMouseClicked
         System.out.println("Boton para Transmitir");
+        msj="transmitir:";
+        out.println(msj);
+        System.out.println("Mensaje enviaddo: " + msj);
+        out.flush(); 
+        msj="";
     }//GEN-LAST:event_btn_TransmitirMouseClicked
 
     private void jtxt_BuscadorKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jtxt_BuscadorKeyReleased
@@ -232,8 +291,23 @@ public class catalogoPeliculas extends javax.swing.JFrame {
        if (evt.getClickCount() == 2) { 
             peliculaSeleccionada = jlst_Peliculas.getSelectedValue().toString();
             System.out.println("Pelicula seleccionada: " + peliculaSeleccionada);
+            msj="pelicula Seleccionada";
+            out.println(msj);
+            System.out.println("Mensaje enviaddo: " + msj);
+            out.flush(); 
+            msj="";
         } 
     }//GEN-LAST:event_jlst_PeliculasMouseClicked
+
+    private void formWindowClosed(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosed
+        try {
+            in.close();
+            out.close();
+            cl.close();
+        } catch (IOException ex) {
+            Logger.getLogger(catalogoPeliculas.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_formWindowClosed
 
 
 
