@@ -55,17 +55,7 @@ public class catalogoPeliculas extends javax.swing.JFrame {
         btn_Refresh.setIcon(iconoRefresh);
         llenarLista();
         initSocket();
-    }
-    
-    public void initSocket(){
-        
-    try { //siempre dentre de bloques try catch cuando trabajemos con sockets
-            
-            cl = new Socket(ip,puerto);
-            
-            out = new PrintWriter(cl.getOutputStream(), true); 
-            in = new BufferedReader(new InputStreamReader(cl.getInputStream()));
-            
+                    
             //para que alguien transmita se envia la siguiente cadena:
             //String registrarPelicula = "transmitir:nombre_de_pelicula";
             //regresa un:ok si si se registro la pelicula en el nodo central
@@ -73,12 +63,25 @@ public class catalogoPeliculas extends javax.swing.JFrame {
             //para degar de transmitir:
             //se envia: dejarTransmitir:nombrepelicula
             //retorna: Se elimino la informacion del nodo central
+        try {
             msj = "obtenerPeliculas";
             out.println(msj);
             msj=in.readLine();
-            
             System.out.println("respuesta de servidor:"+ msj);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    
             
+    }
+    
+    public void initSocket(){
+        
+    try { //siempre dentre de bloques try catch cuando trabajemos con sockets
+            
+            cl = new Socket(ip,puerto);    
+            out = new PrintWriter(cl.getOutputStream(), true); 
+            in = new BufferedReader(new InputStreamReader(cl.getInputStream()));
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -257,10 +260,11 @@ public class catalogoPeliculas extends javax.swing.JFrame {
 
     private void btn_TransmitirMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btn_TransmitirMouseClicked
         System.out.println("Boton para Transmitir");
-        msj="transmitir:";
+        initSocket();
+        msj="transmitir:pelicula1";
         out.println(msj);
         System.out.println("Mensaje enviaddo: " + msj);
-        out.flush(); 
+
         msj="";
     }//GEN-LAST:event_btn_TransmitirMouseClicked
 

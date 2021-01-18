@@ -32,15 +32,19 @@ public class NodoCentral {
                 String msjRecibido;
                 
                 msjRecibido = in.readLine(); 
+                System.out.println(msjRecibido);
                 //transmitir:nombrepelicula
                 if(msjRecibido.substring(0,11).equals("transmitir:")){//transmitir:pelicula:ip
-                    String pelicula = obtenerNombrePelicula(msjRecibido.substring(11));
+                    System.out.println("Transmitir pelicula: "+msjRecibido);
+                    String pelicula = obtenerNombrePelicula(msjRecibido);
                     //out.println("Aqui esta el servidooor");
                     //buscar pelicula
                     if(!buscarPelicula(pelicula)){//agregar nuevo nodo a la pelicula
                         nodos.put(pelicula, cl.getInetAddress());
                         out.println("Te has registrado en nodo central exitosamente");
                         System.out.println("Te has registrado como nodo");     
+                    }else{
+                        System.out.println("La pelicula ya existe");
                     }
                 }else if(msjRecibido.substring(0,16).equals("dejarTransmitir:")){
                     String nombrePelicula = msjRecibido.substring(16);
@@ -80,7 +84,7 @@ public class NodoCentral {
         String nombrePelicula = "";
         try {
             int finNombrePelicula = text.indexOf(":");
-            nombrePelicula = text.substring(0, finNombrePelicula);
+            nombrePelicula = text.substring(finNombrePelicula);
         } catch (Exception e) {
             System.out.println("obtenerNombrePelicula(): Error obteniendo nombre de pelicula.");
         }

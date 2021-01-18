@@ -37,15 +37,13 @@ public class NodoTest {
             //se envia: obtener:nombrepelicula
             //se regresa string con la ip que la trasnmite
             String msj = "";
-            while(true){
+            
                 System.out.println("¿Que le quiere decir al servidor?");
                 msj = stdIn.readLine();
                 out.println(msj);
-                out.flush(); 
                 System.out.println("Servidor dice: " + in.readLine());
-                if(msj.contains("Adios"))
-                    break;
-            }
+                
+            
             //para obtener las peliculas
      
             //regresa: nombrepelicula1,nombrepelicula2,...,
