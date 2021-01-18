@@ -9,14 +9,8 @@ package testrtsppartido;
  *
  * @author fnico
  */
-public class TestRTSPPartido {
-
-    /**
-     * @param args the command line arguments
-     */
+public class TestRTSPServidor {
     public static void main(String[] args) throws Exception {
-        // TODO code application logic here
-        JavaClient.init();
+        JavaServer s = new JavaServer();
     }
-    
 }
