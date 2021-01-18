@@ -178,6 +178,8 @@ public class ventanaInicio extends javax.swing.JFrame {
         this.setVisible(false);
         this.dispose();
         catalogo = new catalogoPeliculas(username,ip,puerto);
+        Thread t = new Thread(catalogo);
+        t.start();
     }//GEN-LAST:event_btn_EntrarMouseClicked
 
     /**

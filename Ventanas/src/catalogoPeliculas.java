@@ -24,7 +24,7 @@ import videoTransmisor.JavaServer;
  *
  * @author Jared
  */
-public class catalogoPeliculas extends javax.swing.JFrame {
+public class catalogoPeliculas extends javax.swing.JFrame implements Runnable{
 
     String username,ip,peliculaSeleccionada,peliculaTransmitir;
     int puerto;
@@ -36,8 +36,7 @@ public class catalogoPeliculas extends javax.swing.JFrame {
     Socket cl;
     PrintWriter out;
     BufferedReader in;
-    JavaServer s;
-    
+    boolean videoStreamflag = false;
     
     /**
      * Creates new form catalogoPeliculas
@@ -300,7 +299,7 @@ public class catalogoPeliculas extends javax.swing.JFrame {
         }
         System.out.println("respuesta de servidor:"+ msj);
         try {
-            JavaServer s = new JavaServer();
+             videoStreamflag = true;
         } catch (Exception ex) {
             Logger.getLogger(catalogoPeliculas.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -377,4 +376,21 @@ public class catalogoPeliculas extends javax.swing.JFrame {
     private javax.swing.JLabel lbl_Transmitir;
     private javax.swing.JLabel lbl_Username;
     // End of variables declaration//GEN-END:variables
+
+    @Override
+    public void run() {
+        while (true) {            
+            System.out.println("antes de while");
+            while (!videoStreamflag) {            
+                System.out.println("...");
+            }
+            System.out.println("Afuera de while perpetuo");
+            try {
+                JavaServer js = new JavaServer();
+            } catch (Exception ex) {
+                Logger.getLogger(catalogoPeliculas.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            videoStreamflag = false;
+        }
+    }
 }
