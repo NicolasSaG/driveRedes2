@@ -13,6 +13,11 @@ import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
+import java.io.IOException;
+import java.net.DatagramSocket;
+import java.net.ServerSocket;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -45,7 +50,7 @@ class Canvas_Demo {
     public static int xpos = 0, ypos = 0;
     String url = "D:\\DownLoads\\Video\\freerun.MP4"; //URL de prueba
     // Constructor
-    public Canvas_Demo() {
+    public Canvas_Demo(ServerSocket welcomeSocket, DatagramSocket serv) {
 
         panel = new JPanel();
         panel.setLayout(new BorderLayout());
@@ -63,7 +68,12 @@ class Canvas_Demo {
         mediaPlayer.setVideoSurface(videoSurface);
 
         frame = new JFrame("Servidor de Video");
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        frame.addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowClosed(java.awt.event.WindowEvent evt) {
+                formWindowClosed(evt, welcomeSocket, serv);
+            }
+        });
         frame.setLocation(200, 0);
         frame.setSize(640, 960);
         frame.setAlwaysOnTop(true);
@@ -122,4 +132,14 @@ class Canvas_Demo {
         });
 
     }
+    
+    private void formWindowClosed(java.awt.event.WindowEvent evt, ServerSocket welcomeSocket, DatagramSocket serv) {                                  
+        try {
+            welcomeSocket.close();
+            serv.close();
+        } catch (IOException ex) {
+            System.out.println("Error cerrando sockets de transmision");
+            ex.printStackTrace();
+        }
+    } 
 }

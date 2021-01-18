@@ -41,6 +41,7 @@ public class NodoCentral {
                     //buscar pelicula
                     if(!buscarPelicula(pelicula)){//agregar nuevo nodo a la pelicula
                         nodos.put(pelicula, cl.getInetAddress());
+                        System.out.println("Nombre de pelicula: |"+pelicula+"|");
                         out.println("Te has registrado en nodo central exitosamente");
                         System.out.println("Te has registrado como nodo");     
                     }else{
@@ -85,7 +86,7 @@ public class NodoCentral {
         String nombrePelicula = "";
         try {
             int finNombrePelicula = text.indexOf(":");
-            nombrePelicula = text.substring(finNombrePelicula);
+            nombrePelicula = text.substring(finNombrePelicula+1);
         } catch (Exception e) {
             System.out.println("obtenerNombrePelicula(): Error obteniendo nombre de pelicula.");
         }
@@ -117,12 +118,14 @@ public class NodoCentral {
         Set<String> keys = nodos.keySet();
         String peliculas = "";
         if(obtenerNumeroPeliculas() > 0){
+            
             for (String key : keys) {
-                peliculas += nodos.get(key)+",";
+                peliculas += key+",";
             }
         }else{
             peliculas += ",";
         }
+        System.out.println(peliculas);
         return peliculas;
     }
     

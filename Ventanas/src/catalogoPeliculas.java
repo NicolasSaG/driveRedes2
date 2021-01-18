@@ -299,7 +299,8 @@ public class catalogoPeliculas extends javax.swing.JFrame implements Runnable{
         }
         System.out.println("respuesta de servidor:"+ msj);
         try {
-             videoStreamflag = true;
+             Thread t = new Thread(this);
+             t.start();
         } catch (Exception ex) {
             Logger.getLogger(catalogoPeliculas.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -379,18 +380,11 @@ public class catalogoPeliculas extends javax.swing.JFrame implements Runnable{
 
     @Override
     public void run() {
-        while (true) {            
-            System.out.println("antes de while");
-            while (!videoStreamflag) {            
-                System.out.println("...");
-            }
-            System.out.println("Afuera de while perpetuo");
-            try {
-                JavaServer js = new JavaServer();
-            } catch (Exception ex) {
-                Logger.getLogger(catalogoPeliculas.class.getName()).log(Level.SEVERE, null, ex);
-            }
-            videoStreamflag = false;
+        try {
+            new JavaServer();
+        } catch (Exception e) {
+            System.out.println("run de catalogo: ");
+            e.printStackTrace();
         }
     }
 }

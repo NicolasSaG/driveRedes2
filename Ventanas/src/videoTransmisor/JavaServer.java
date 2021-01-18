@@ -58,7 +58,7 @@ public class JavaServer {
         byte[] buf = new byte[62000];
         DatagramPacket dp = new DatagramPacket(buf, buf.length);
 
-        Canvas_Demo canv = new Canvas_Demo();
+        Canvas_Demo canv = new Canvas_Demo(welcomeSocket, serv);
         System.out.println("Iniciando servidor");
         i = 0;
 
@@ -66,42 +66,48 @@ public class JavaServer {
 
         while (true) {
 
-            System.out.println(serv.getPort());
-            serv.receive(dp);
-            System.out.println(new String(dp.getData()));
-            buf = "starts".getBytes();
+            try {
+                System.out.println(serv.getPort());
+                serv.receive(dp);
+                System.out.println(new String(dp.getData()));
+                buf = "starts".getBytes();
 
-            inet[i] = dp.getAddress();
-            port[i] = dp.getPort();
+                inet[i] = dp.getAddress();
+                port[i] = dp.getPort();
 
-            DatagramPacket dsend = new DatagramPacket(buf, buf.length, inet[i], port[i]);
-            serv.send(dsend);
+                DatagramPacket dsend = new DatagramPacket(buf, buf.length, inet[i], port[i]);
+                serv.send(dsend);
 
-            Vidthread sendvid = new Vidthread(serv);
+                Vidthread sendvid = new Vidthread(serv);
 
-            System.out.println("Esperando... \n ");
-            connectionSocket[i] = welcomeSocket.accept();
-            System.out.println("¡Conectado! " + i);
+                System.out.println("Esperando... \n ");
+                connectionSocket[i] = welcomeSocket.accept();
+                System.out.println("¡Conectado! " + i);
 
-            inFromClient[i] = new BufferedReader(new InputStreamReader(connectionSocket[i].getInputStream()));
-            outToClient[i] = new DataOutputStream(connectionSocket[i].getOutputStream());
-            outToClient[i].writeBytes("Conectado > Servidor \n");
+                inFromClient[i] = new BufferedReader(new InputStreamReader(connectionSocket[i].getInputStream()));
+                outToClient[i] = new DataOutputStream(connectionSocket[i].getOutputStream());
+                outToClient[i].writeBytes("Conectado > Servidor \n");
 
-            st[i] = new SThread(i);
-            st[i].start();
+                st[i] = new SThread(i);
+                st[i].start();
 
-            if (count == 0) {
-                Sentencefromserver sen = new Sentencefromserver();
-                sen.start();
-                count++;
-            }
+                if (count == 0) {
+                    Sentencefromserver sen = new Sentencefromserver();
+                    sen.start();
+                    count++;
+                }
 
-            System.out.println(inet[i]);
-            sendvid.start();
+                System.out.println(inet[i]);
+                sendvid.start();
+                
+                i++;
 
-            i++;
-
-            if (i == 30) {
+                if (i == 30) {
+                    break;
+                }
+            } catch (Exception e) {
+                System.out.println("algo paso xd javaServer constructor");
+                e.printStackTrace();
                 break;
             }
         }
