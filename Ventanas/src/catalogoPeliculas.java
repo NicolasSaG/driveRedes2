@@ -386,5 +386,14 @@ public class catalogoPeliculas extends javax.swing.JFrame implements Runnable{
             System.out.println("run de catalogo: ");
             e.printStackTrace();
         }
+        initSocket();
+        msj="eliminar:" + peliculaTransmitir;
+        out.println(msj);
+        System.out.println("Mensaje enviaddo: " + msj);
+        initSocket();
+        msj="obtenerPeliculas";
+        out.println(msj);
+        System.out.println("Mensaje enviaddo: " + msj);
+        actualizarCatalogo(msj);
     }
 }
