@@ -387,7 +387,7 @@ public class catalogoPeliculas extends javax.swing.JFrame implements Runnable{
             e.printStackTrace();
         }
         initSocket();
-        msj="eliminar:" + peliculaTransmitir;
+        msj="dejarTransmitir:" + peliculaTransmitir;
         out.println(msj);
         System.out.println("Mensaje enviaddo: " + msj);
         initSocket();
