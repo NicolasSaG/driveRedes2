@@ -331,14 +331,14 @@ public class catalogoPeliculas extends javax.swing.JFrame implements Runnable{
     }//GEN-LAST:event_jlst_PeliculasValueChanged
 
     private void jlst_PeliculasMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jlst_PeliculasMouseClicked
-       initSocket();
+
         if (evt.getClickCount() == 2) { 
+            initSocket();
             peliculaSeleccionada = jlst_Peliculas.getSelectedValue().toString();
             System.out.println("Pelicula seleccionada: " + peliculaSeleccionada);
             msj="obtener:" + peliculaSeleccionada;
             out.println(msj);
-            System.out.println("Mensaje enviaddo: " + msj);
-            out.flush(); 
+            System.out.println("Mensaje enviaddo: " + msj); 
              try {
             msj=in.readLine();
             } catch (IOException ex) {

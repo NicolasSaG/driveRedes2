@@ -1,3 +1,0 @@
-videoTransmisor.Canvas_Demo$1
-videoTransmisor.Canvas_Demo$2
-videoTransmisor.Canvas_Demo
