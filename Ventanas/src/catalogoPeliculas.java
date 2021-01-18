@@ -26,7 +26,7 @@ import videoTransmisor.JavaServer;
  */
 public class catalogoPeliculas extends javax.swing.JFrame implements Runnable{
 
-    String username,ip,peliculaSeleccionada,peliculaTransmitir;
+    String username,ip,peliculaSeleccionada,peliculaTransmitir, ipAConectarse;
     int puerto;
     String msj = "obtenerPeliculas";
     ImageIcon iconobtnBuscar = new ImageIcon("src/Iconos/lupa.jpg");
@@ -36,8 +36,8 @@ public class catalogoPeliculas extends javax.swing.JFrame implements Runnable{
     Socket cl;
     PrintWriter out;
     BufferedReader in;
-    boolean videoStreamflag = false;
-    
+    boolean videoTransmitir = false;
+    boolean videoVer = false;
     /**
      * Creates new form catalogoPeliculas
      */
@@ -294,11 +294,13 @@ public class catalogoPeliculas extends javax.swing.JFrame implements Runnable{
         System.out.println("Mensaje enviaddo: " + msj);
         try {
             msj=in.readLine();
+            ipAConectarse = msj;
         } catch (IOException ex) {
             Logger.getLogger(catalogoPeliculas.class.getName()).log(Level.SEVERE, null, ex);
         }
         System.out.println("respuesta de servidor:"+ msj);
         try {
+            videoTransmitir = true;
              Thread t = new Thread(this);
              t.start();
         } catch (Exception ex) {
@@ -346,7 +348,9 @@ public class catalogoPeliculas extends javax.swing.JFrame implements Runnable{
             }
             System.out.println("respuesta de servidor:"+ msj);
            try {
-               JavaClient.init(msj);
+               videoVer = true;
+               Thread t = new Thread(this);
+               t.start();
            } catch (Exception ex) {
                Logger.getLogger(catalogoPeliculas.class.getName()).log(Level.SEVERE, null, ex);
            }
@@ -380,20 +384,30 @@ public class catalogoPeliculas extends javax.swing.JFrame implements Runnable{
 
     @Override
     public void run() {
-        try {
-            new JavaServer();
-        } catch (Exception e) {
-            System.out.println("run de catalogo: ");
-            e.printStackTrace();
+        if(videoTransmitir){
+            try {
+                new JavaServer();
+            } catch (Exception e) {
+                System.out.println("run de catalogo: ");
+                e.printStackTrace();
+            }
+            initSocket();
+            msj="dejarTransmitir:" + peliculaTransmitir;
+            out.println(msj);
+            System.out.println("Mensaje enviaddo: " + msj);
+            initSocket();
+            msj="obtenerPeliculas";
+            out.println(msj);
+            System.out.println("Mensaje enviaddo: " + msj);
+            actualizarCatalogo(msj);
+        }else if(videoVer){
+            try {
+                JavaClient.init(ipAConectarse);
+            } catch (Exception e) {
+                System.out.println("Error viendo un video");
+                e.printStackTrace();
+            }
+            
         }
-        initSocket();
-        msj="dejarTransmitir:" + peliculaTransmitir;
-        out.println(msj);
-        System.out.println("Mensaje enviaddo: " + msj);
-        initSocket();
-        msj="obtenerPeliculas";
-        out.println(msj);
-        System.out.println("Mensaje enviaddo: " + msj);
-        actualizarCatalogo(msj);
     }
 }

@@ -7,9 +7,12 @@ package videoReceptor;
 
 import java.awt.BorderLayout;
 import java.awt.GridLayout;
+import java.awt.event.WindowEvent;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
+import java.io.IOException;
 import java.net.DatagramPacket;
+import java.net.Socket;
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
@@ -35,10 +38,15 @@ class Vidshow extends Thread {
     BufferedImage bf;
     ImageIcon imc;
 
-    public Vidshow() throws Exception {
+    public Vidshow(Socket clien) throws Exception {
         jf.setSize(640, 960);
         jf.setTitle("Cliente");
-        jf.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        jf.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        jf.addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowClosed(java.awt.event.WindowEvent evt) {
+                formWindowClosed(evt, clien);
+            }
+        });
         jf.setAlwaysOnTop(true);
         jf.setLayout(new BorderLayout());
         jf.setVisible(true);
@@ -55,6 +63,16 @@ class Vidshow extends Thread {
         half.add(jpane);
         half.add(tb);
         ta.setText("--- Chat iniciado ---\n\n");
+    }
+    
+    private void formWindowClosed(WindowEvent evt, Socket clien) {
+        try {
+            clien.close();
+            
+        } catch (IOException ex) {
+            System.out.println("Error cerrando sockets de visualizacion");
+            ex.printStackTrace();
+        }
     }
 
     @Override

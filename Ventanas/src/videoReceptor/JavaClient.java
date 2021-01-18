@@ -24,38 +24,43 @@ public class JavaClient {
     }
     
     public static void init(String ip) throws Exception {
-        ds = new DatagramSocket();
+        try {
+            ds = new DatagramSocket();
 
-        byte[] init = new byte[62000];
-        init = "givedata".getBytes();
+            byte[] init = new byte[62000];
+            init = "givedata".getBytes();
 
-        InetAddress addr = InetAddress.getByName(ip);
-        DatagramPacket dp = new DatagramPacket(init, init.length, addr, 1234);
-        ds.send(dp);
+            InetAddress addr = InetAddress.getByName(ip);
+            DatagramPacket dp = new DatagramPacket(init, init.length, addr, 1234);
+            ds.send(dp);
 
-        DatagramPacket rcv = new DatagramPacket(init, init.length);
-        ds.receive(rcv);
-        System.out.println(new String(rcv.getData()));
-        System.out.println(ds.getPort());
-        Vidshow vd = new Vidshow();
-        vd.start();
-        String modifiedSentence;
-        InetAddress inetAddress = InetAddress.getByName(ip);
-        System.out.println(inetAddress);
+            DatagramPacket rcv = new DatagramPacket(init, init.length);
 
-        Socket clientSocket = new Socket(inetAddress, 6782);
-        DataOutputStream outToServer
-                = new DataOutputStream(clientSocket.getOutputStream());
+            ds.receive(rcv);
+            System.out.println(new String(rcv.getData()));
+            System.out.println(ds.getPort());
+            InetAddress inetAddress = InetAddress.getByName(ip);
+            System.out.println(inetAddress);
 
-        BufferedReader inFromServer
-                = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
-        outToServer.writeBytes("Conectado\n");
+            Socket clientSocket = new Socket(inetAddress, 6782);
+            Vidshow vd = new Vidshow(clientSocket);
+            vd.start();
+            String modifiedSentence;
 
-        CThread write = new CThread(inFromServer, outToServer, 0);
-        CThread read = new CThread(inFromServer, outToServer, 1);
+            DataOutputStream outToServer
+                    = new DataOutputStream(clientSocket.getOutputStream());
 
-        write.join();
-        read.join();
-        clientSocket.close();
+            BufferedReader inFromServer
+                    = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
+            outToServer.writeBytes("Conectado\n");
+
+            CThread write = new CThread(inFromServer, outToServer, 0);
+            CThread read = new CThread(inFromServer, outToServer, 1);
+
+            write.join();
+            read.join();
+            clientSocket.close();
+        } catch (Exception e) {
+        }
     }
 }
